@@ -1,4 +1,4 @@
-**Los Angeles Crime Visualiser**
+**Los Angeles Crime Visualiser** \
 Monash University Data Analytics Bootcamp Project 3 by Group 3 (Michael, Talieh, Wassim, Nicholas)
 ---
 Project objective:
