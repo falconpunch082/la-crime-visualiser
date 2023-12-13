@@ -1,14 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
-    <!-- <link rel="stylesheet" href="static/css/style.css"> -->
+    <!-- Metadata -->
+    <title>Los Angeles Crime Visualiser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+
+    <!-- Code to reset default browser styles -->
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
+    </style>
+
+    <!-- Code to set default styles for HTML and body elements -->
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Inter;
+        font-size: 16px;
+      }
+
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.15;
+        color: var(--dl-color-gray-black);
+        background-color: var(--dl-color-gray-white);
+
+      }
+    </style>
+
+    <!-- Code to call necessary fonts-->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+
+    <!-- CSS code call -->
+    <link href="./static/css/index.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>Welcome to My Website</h1>  
-	<!-- <script src="static/js/logic.js"></script> -->
+    <div>
+      <div class="home-container">
+        <!-- This div contains everything visible -->
+        <div id="visualisation" class="home-container1">
+          <!-- This div is where the Leaflet map will be placed -->>
+          <div id="map" class="home-container2"></div>
+          <!-- 
+          This div is where the summary charts will be placed.
+          This div is divided into search div and chart div.
+          -->
+          <div id="summary" class="home-container3">
+            <!-- This is where the dropdown menus live -->
+            <div id="search" class="home-container4">
+              <h3 class="home-text">SEARCH</h3>
+              <!-- Area dropdown -->
+              <select id="area" class="home-select">
+                <option value="null">Area</option>
+                <option value="Central">CENTRAL</option>
+                <option value="Rampart">RAMPART</option>
+                <option value="Southwest">SOUTHWEST</option>
+                <option value="Hollenback">HOLLENBACK</option>
+                <option value="Harbor">HARBOR</option>
+                <option value="Hollywood">HOLLYWOOD</option>
+                <option value="Wilshire">WILSHIRE</option>
+                <option value="West LA">WEST LA</option>
+                <option value="Van Nuys">VAN NUYS</option>
+                <option value="West Valley">WEST VALLEY</option>
+                <option value="Northeast">NORTHEAST</option>
+                <option value="77th Street">77TH STREET</option>
+                <option value="Newton">NEWTON</option>
+                <option value="Pacific">PACIFIC</option>
+                <option value="N Hollywood">NORTH HOLLYWOOD</option>
+                <option value="Foothill">FOOTHILL</option>
+                <option value="Devonshire">DEVONSHIRE</option>
+                <option value="Southeast">SOUTHEAST</option>
+                <option value="Mission">MISSION</option>
+                <option value="Olympic">OLYMPIC</option>
+                <option value="Topanga">TOPANGA</option>
+              </select>
+              <!-- Crime dropdown -->
+              <select id="crime" class="home-select1">
+                <option value="null" selected="">Crime</option>
+                <option value="CRIMINAL HOMICIDE">
+                  110 - CRIMINAL HOMICIDE
+                </option>
+                <option value="MANSLAUGHTER, NEGLIGENT">
+                  113 - MANSLAUGHTER, NEGLIGENT
+                </option>
+                <option value="RAPE, FORCIBLE">121 - RAPE, FORCIBLE</option>
+                <option value="RAPE, ATTEMPTED">122 - RAPE, ATTEMPTED</option>
+                <option value="ROBBERY">210 - ROBBERY</option>
+                <option value="ATTEMPTED ROBBERY">
+                  220 - ATTEMPTED ROBBERY
+                </option>
+                <option value="ASSAULT WITH DEADLY WEAPON, AGGRAVATED">
+                  230 - ASSAULT WITH DEADLY WEAPON, AGGRAVATED
+                </option>
+                <option value=" ASSAULT WITH DEADLY WEAPON ON POLICE">
+                  231 - ASSAULT WITH DEADLY WEAPON ON POLICE
+                </option>
+                <option value="CHILD ABUSE (PHYSICAL) - AGGRAVATED ASSAULT">
+                  235 - CHILD ABUSE (PHYSICAL) - AGGRAVATED ASSAULT
+                </option>
+              </select>
+            </div>
+            <!-- 
+            This is the div where the charts live.
+            This div contains two divs for each chart.
+            -->
+            <div id="chart" class="home-container5">
+              <div id="chart-1" class="home-container6"></div>
+              <div id="chart-2" class="home-container7"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
