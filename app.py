@@ -25,12 +25,13 @@ app = Flask(__name__)
 # List all the available routes in homepage route.
 @app.route("/")
 def beginning():
-    return (
-        "<h1>Available routes:</h1>"
-        "/api/v1.0/crimes<br/>"
-        "/api/v1.0/summary<br/>"
-        "/api/v1.0/filters<br/>"
-    )
+    # return (
+    #     "<h1>Available routes:</h1>"
+    #     "/api/v1.0/crimes<br/>"
+    #     "/api/v1.0/summary<br/>"
+    #     "/api/v1.0/filters<br/>"
+    # )
+    return render_template("homepage.html")
 # Flask route to retrieve crimes data
 @app.route("/api/v1.0/crimes")
 def crimes():
