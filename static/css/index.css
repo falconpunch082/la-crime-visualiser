@@ -1,5 +1,19 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+#crime-map,
+body,
+html {
+  height: 100%;
+}
+.legend {
+   background: #ffffff;
+   padding: 5px;
+}
 .home-container {
   width: 100%;
+  height: 100%;
   display: flex;
   overflow: auto;
   min-height: 100vh;
@@ -119,6 +133,10 @@
   flex-direction: column;
   justify-content: flex-start;
 }
+#chart-carousel {
+  width: 100%;
+  height: 100%;
+}
 .home-container12 {
   width: 100%;
   height: 15%;
@@ -176,7 +194,7 @@
 @media(max-width: 1600px) {
   .home-container01 {
     width: 100%;
-    height: `600px;
+    height: 100%;
   }
   .home-container02 {
     width: 75%;
