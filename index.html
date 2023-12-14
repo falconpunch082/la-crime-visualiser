@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Metadata -->>
     <title>Los Angeles Crime Visualiser</title>
     <meta property="og:title" content="Ambitious Disguised Fox" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
 
+    <!-- Code to reset default browser styles-->>
     <style data-tag="reset-style-sheet">
       html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
     </style>
 
+    <!-- Code to set default styles for HTML and body elements-->
     <style data-tag="default-style-sheet">
       html {
         font-family: Inter;
@@ -29,6 +32,7 @@
       }
     </style>
 
+    <!-- Fonts -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
@@ -69,69 +73,95 @@
     <!-- Website CSS -->>
     <link href="./static/css/index.css" rel="stylesheet" type="text/css"/>
 
+    <script type="text/javascript">
+      $(window).on('load', function() {
+          $('#welcome-popup').modal('show');
+      });
+    </script>
+
   </head>
   <body>
-    <div class="home-container">
-      <div id="visualisation" class="home-container01">
 
+    <!-- Welcome popup will load upon page startup-->
+    <div id="welcome-popup" class="modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Welcome to the Los Angeles Crime Visualiser!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              This website shows where crimes have occurred in Los Angeles, as well
+              as some data visualisations! <br>
+              To look at how this works, head to <a href="https://github.com/falconpunch082/la-crime-visualiser">the GitHub Repo</a>! <br>
+              To access the API we made for these visualisations, head over here!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-container">
+      <!--This div contains everything visible -->
+      <div id="visualisation" class="home-container01">
+        <!-- This div is where the Leaflet map lives -->
         <div id="map-container" class="home-container02">
           <div id="crime-map"></div>
         </div>
-
+        <!-- 
+          This div is where the summary charts will be placed.
+          This div is divided into search div and chart div.
+        -->
         <div id="summary-container" class="home-container03">
-
+          <!-- This div is where the filter inputs live -->
           <div id="search" class="home-container04">
-
+            <!-- This div is where the dropdown menus and the filter text live -->
             <div id="dropdown-section" class="home-container05">
-
+              <!-- Filter text container -->
               <div id="filter-box" class="home-container06">
                 <h3 id="filter-text" class="home-text">FILTER</h3>
               </div>
-
+              <!-- Area dropdown container made with bootstrap-multiselect -->
               <div id="area-box" class="home-container07">
-
                 <select id="area" class="home-select" multiple="multiple">
                   <option value="Central">CENTRAL</option>
                   <option value="Rampart">RAMPART</option>
                   <option value="Southwest">SOUTHWEST</option>
                   <option value="Hollenback">HOLLENBACK</option>
                 </select>
-
               </div>
-
+              <!-- Crime dropdown container made with bootstrap-multiselect -->
               <div id="crime-box" class="home-container08">
-
                 <select id="crime" class="home-select1" multiple="multiple">
                   <option value="CRIMINAL HOMICIDE">110 - CRIMINAL HOMICIDE</option>
                   <option value="MANSLAUGHTER, NEGLIGENT">113 - MANSLAUGHTER, NEGLIGENT</option>
                   <option value="RAPE, FORCIBLE">121 - RAPE, FORCIBLE</option>
                   <option value="RAPE, ATTEMPTED">122 - RAPE, ATTEMPTED</option>
                 </select>
-
               </div>
-
             </div>
-
+            <!-- This div is where the slider lives -->
             <div id="slider" class="home-container09">
-
+              <!-- rSlider will convert this text input into a slider -->
               <input type="text" id="year"/>
-
             </div>
-
           </div>
-          
+          <!-- This is where the charts and cards live -->
           <div id="charts-and-cards" class="home-container10">
-
+            <!-- Charts container -->
             <div id="chart-gallery-container" class="home-container11">
-
+              <!-- Charts are within a carousel -->
               <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
-                <!-- Indicators for easy access-->
+                <!-- Indicators for easy access -->
                 <div class="carousel-indicators">
                   <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                   <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                   <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </div>
-
                 <!-- Actual contents-->
                 <div class="carousel-inner">
                   <div class="carousel-item active">
@@ -144,7 +174,6 @@
                     <img src="./static/placeholder3.jpg" class="d-block w-100">
                   </div>
                 </div>
-
                 <!-- Left and right buttons to control carousel-->
                 <button class="carousel-control-prev" type="button" data-bs-target="#chart-carousel" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -154,20 +183,14 @@
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
-
               </div>
-
             </div>
-
+            <!-- This div is where the cards live -->
             <div id="cards" class="home-container12">
-
               <div class="home-container13"></div>
               <div class="home-container14"></div>
-
             </div>
-
           </div>
-          
         </div>
       </div>
     </div>
