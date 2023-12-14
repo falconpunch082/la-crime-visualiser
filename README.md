@@ -19,9 +19,9 @@ To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data
 
 - Talieh Sheikholeslami (Talieh-Sh): Creation of Python Flask API providing data from created database for visualisations + implementation of [Frozen-Flask](https://pypi.org/project/Frozen-Flask/).
 
-- Wassim Deen (wdeen) and Nicholas Dale (falconpunch082): Data visualisation using data from created Flask API (Leaflet map with [slider](https://github.com/dwilhelm89/LeafletSlider ), summary charts with [charts.js](https://www.chartjs.org/)).
+- Wassim Deen (wdeen) and Nicholas Dale (falconpunch082): Data visualisation using data from created Flask API (Leaflet map, summary charts with [charts.js](https://www.chartjs.org/)).
 
-- Nicholas Dale (falconpunch082): Frontend (responsive HTML + CSS) with help from [teleport.io](https://teleporthq.io/).
+- Nicholas Dale (falconpunch082): Frontend (responsive HTML + CSS) with help from [teleport.io](https://teleporthq.io/), and implementation of input solutions using [bootstrap](https://getbootstrap.com/), [bootstrap-multiselect](https://github.com/davidstutz/bootstrap-multiselect) and [rSlider](https://github.com/slawomir-zaziablo/range-slider/tree/master).
 
 ---
 
@@ -33,7 +33,9 @@ To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data
 
 - HTML + CSS (with assistance from teleporthq.io).
 
-- Javascript libraries like Leaflet, charts.js.
+- Javascript libraries like Leaflet, charts.js and rSlider.js.
+
+- Bootstrap and the bootstrap-multiselect library.
 
 ---
 
