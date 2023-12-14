@@ -66,7 +66,7 @@
   color: rgb(255, 255, 255);
   position: absolute;
   font-size: 25px;
-  font-family: "Rob";
+  font-family: "Roboto";
   text-transform: uppercase;
 }
 .home-container07 {
@@ -105,7 +105,9 @@
 .home-container10 {
   width: 100%;
   height: 90%;
-
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
   background-color: #d6d4d3;
 }
 .home-container11 {
@@ -141,7 +143,7 @@
   display: flex;
   align-items: stretch;
   justify-content: flex-end;
-  background-color: ;
+  background-color: red;
 }
 .customRange {
   -webkit-appearance: none;
