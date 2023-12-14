@@ -52,3 +52,5 @@ To take a look at the database, simply click here.
 **Changelog:**
 
 v0.1 - Created draft HTML + CSS files to host visualisations, and created database files.
+v0.2 - Created Flask API
+v0.3 - Finalised frontend website
