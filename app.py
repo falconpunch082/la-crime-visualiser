@@ -29,11 +29,11 @@ def beginning():
     #     "<h1>Available routes:</h1>"
     #     "/api/v1.0/crimes<br/>"
     #     "/api/v1.0/summary<br/>"
-    #     "/api/v1.0/filters<br/>"
+    #     "/api/v1.0/summary_yearly_monthly_area_crime_description"
     # )
     return render_template("homepage.html")
 # Flask route to retrieve crimes data
-@app.route("/api/v1.0/crimes")
+@app.route("/api/v1.0/sample_data")
 def crimes():
 
     # Access the "crime_data_2" table
@@ -87,6 +87,60 @@ def crimes():
     return jsonify(crimes_list)
    
 # Additional routes can be added here
+########
+@app.route("/api/v1.0/summary")
+def yearly_summary():
+    crime_data_2 = Base.classes.crime_data_2
+    session = Session(engine)
+
+    # Example query to get count of crimes per year
+    results_yearly = session.query(
+        func.extract('year', crime_data_2.date_occurred).label('year'),
+        func.count().label('crime_count')
+    ).group_by('year').order_by('year').all()
+
+    session.close()
+
+    yearly_data = [{'year': year, 'crime_count': count} for year, count in results_yearly]
+    return jsonify(yearly_data)
+
+########
+@app.route("/api/v1.0/summary_yearly_monthly_area_crime_description")
+def summary_yearly_monthly_area_crime_description():
+    crime_data_2 = Base.classes.crime_data_2
+    session = Session(engine)
+
+    # Query to group by year, month, area_name, and crime_description
+    results = session.query(
+        func.extract('year', crime_data_2.date_occurred).label('year'),
+        func.extract('month', crime_data_2.date_occurred).label('month'),
+        crime_data_2.area_name.label('area_name'),
+        crime_data_2.crime_description.label('crime_description'),
+        func.count().label('crime_count')
+    ).group_by(
+        'year', 'month', 'area_name', 'crime_description'
+    ).order_by(
+        'year', 'month', 'area_name', 'crime_description'
+    ).all()
+
+    session.close()
+
+    # Preparing the data for JSON response
+    summary_data = []
+    for year, month, area_name, crime_description, count in results:
+        summary_data.append({
+            'year': year,
+            'month': month,
+            'area_name': area_name,
+            'crime_description': crime_description,
+            'crime_count': count
+        })
+
+    return jsonify(summary_data)
+
+########
+
+
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
