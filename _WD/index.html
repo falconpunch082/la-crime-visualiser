@@ -72,6 +72,7 @@
 
     <!-- Website CSS -->>
     <link href="./static/css/index.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="./static/css/style.css" />
 
     <script type="text/javascript">
       $(window).on('load', function() {
@@ -121,30 +122,42 @@
           <!-- This div is where the filter inputs live -->
           <div id="search" class="home-container04">
             <!-- This div is where the dropdown menus and the filter text live -->
-            <div id="dropdown-section" class="home-container05">
+            <div id="top-filter" class="home-container05">
               <!-- Filter text container -->
               <div id="filter-box" class="home-container06">
                 <h3 id="filter-text" class="home-text">FILTER</h3>
               </div>
               <!-- Area dropdown container made with bootstrap-multiselect -->
               <div id="area-box" class="home-container07">
-                <select id="selArea" class="home-select" onchange="optionChanged(this.value)" multiple="multiple"></select>
+                <select id="selArea" class="home-select" multiple="multiple">
+                  <!-- This section is automatically filled with options thanks to visualisations.js-->
+                </select>
               </div>
               <!-- Crime dropdown container made with bootstrap-multiselect -->
               <div id="crime-box" class="home-container08">
-                <select id="selCrime" class="home-select1" onchange="optionChanged(this.value)" multiple="multiple"></select>
+                <select id="selCrime" class="home-select1" multiple="multiple">
+                  <!-- This section is automatically filled with options thanks to visualisations.js-->
+                </select>
               </div>
             </div>
             <!-- This div is where the slider lives -->
-            <div id="slider" class="home-container09">
+            <div id="bottom-filter" class="home-container09">
               <!-- rSlider will convert this text input into a slider -->
-              <input type="text" id="year"/>
+              <div id="slider" class="home-container10">
+                <input type="text" id="year"/>
+              </div>
+              <!-- Button to start query once user has chosen what to search for -->
+              <div id="button-box" class="home-container11">
+                <button type="button" class="home-button button">
+                  Search
+                </button>
+              </div>
             </div>
           </div>
           <!-- This is where the charts and cards live -->
-          <div id="charts-and-cards" class="home-container10">
+          <div id="charts-and-cards" class="home-container12">
             <!-- Charts container -->
-            <div id="chart-gallery-container" class="home-container11">
+            <div id="chart-gallery-container" class="home-container13">
               <!-- Charts are within a carousel -->
               <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
                 <!-- Indicators for easy access -->
@@ -177,9 +190,9 @@
               </div>
             </div>
             <!-- This div is where the cards live -->
-            <div id="cards" class="home-container12">
-              <div class="home-container13"></div>
-              <div class="home-container14"></div>
+            <div id="cards" class="home-container14">
+              <div class="home-container15"></div>
+              <div class="home-container16"></div>
             </div>
           </div>
         </div>
@@ -189,12 +202,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- D3.js for API call -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <!-- Chart.js for Visualisations-->
-    <script src="https://cdnjs.com/libraries/Chart.js"></script>    
     <!-- Input JS-->
-    <script src="./static/js/input.js"></script>
     <script src="./static/js/map.js"></script>
     <script src="./static/js/visualisations.js"></script>
-
   </body>
 </html>

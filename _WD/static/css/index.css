@@ -13,7 +13,6 @@ html {
 }
 .home-container {
   width: 100%;
-  height: 100%;
   display: flex;
   overflow: auto;
   min-height: 100vh;
@@ -76,7 +75,7 @@ html {
 }
 .home-text {
   top: 25%;
-  left: 25%;
+  left: 20%;
   color: rgb(255, 255, 255);
   position: absolute;
   font-size: 25px;
@@ -112,19 +111,44 @@ html {
   width: 100%;
   height: 51px;
   display: flex;
-  align-items: center;
+  position: relative;
+  align-items: flex-end;
   flex-direction: column;
-  background-color: #fff;
+  justify-content: center;
 }
 .home-container10 {
+  top: 0px;
+  flex: 0 0 auto;
+  left: 0px;
+  width: 75%;
+  border: 2px dashed rgba(120, 120, 120, 0.4);
+  height: 100%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+}
+.home-container11 {
+  flex: 0 0 auto;
+  width: 25%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-button {
+  width: 70%;
+  height: 60%;
+}
+.home-container12 {
   width: 100%;
   height: 90%;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  background-color: #d6d4d3;
+  background-color: d6d4d3;
 }
-.home-container11 {
+.home-container13 {
   width: 100%;
   border: 2px dashed rgba(120, 120, 120, 0.4);
   height: 85%;
@@ -133,11 +157,7 @@ html {
   flex-direction: column;
   justify-content: flex-start;
 }
-#chart-carousel {
-  width: 100%;
-  height: 100%;
-}
-.home-container12 {
+.home-container14 {
   width: 100%;
   height: 15%;
   display: flex;
@@ -145,7 +165,7 @@ html {
   flex-direction: row;
   justify-content: flex-start;
 }
-.home-container13 {
+.home-container15 {
   flex: 0 0 auto;
   width: 50%;
   border: 2px dashed rgba(120, 120, 120, 0.4);
@@ -153,15 +173,13 @@ html {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  background-color: aqua;
 }
-.home-container14 {
+.home-container16 {
   width: 50%;
   height: 100%;
   display: flex;
   align-items: stretch;
   justify-content: flex-end;
-  background-color: red;
 }
 .customRange {
   -webkit-appearance: none;
@@ -190,11 +208,14 @@ html {
   background: #04AA6D;
   cursor: pointer;
 }
-
+#chart-carousel {
+  width: 100%;
+  height: 100%;
+}
 @media(max-width: 1600px) {
   .home-container01 {
     width: 100%;
-    height: 100%;
+    height: 600px;
   }
   .home-container02 {
     width: 75%;
@@ -205,7 +226,10 @@ html {
   .home-text {
     left: var(--dl-space-space-unit);
   }
-  .home-container10 {
+  .home-container09 {
+    height: 50%;
+  }
+  .home-container12 {
     height: 90%;
   }
 }
@@ -234,15 +258,15 @@ html {
   .home-container09 {
     height: 50%;
   }
-  .home-container10 {
+  .home-container12 {
     height: 88%;
     position: relative;
   }
-  .home-container11 {
+  .home-container13 {
     width: 50%;
     height: 100%;
   }
-  .home-container12 {
+  .home-container14 {
     top: -1px;
     right: 0px;
     width: 50%;
@@ -250,11 +274,11 @@ html {
     height: 100%;
     position: absolute;
   }
-  .home-container13 {
+  .home-container15 {
     width: 100%;
     height: 50%;
   }
-  .home-container14 {
+  .home-container16 {
     width: 100%;
     height: 50%;
     align-self: flex-end;
@@ -278,20 +302,16 @@ html {
     border-width: 1px;
     border-radius: var(--dl-radius-radius-radius4);
   }
-  .home-container12 {
+  .home-container14 {
     top: -1px;
     right: 2px;
-    bottom: -8px;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: flex-start;
   }
-  .home-container13 {
+  .home-container15 {
     align-self: flex-start;
     align-items: flex-start;
     justify-content: flex-start;
   }
-  .home-container14 {
+  .home-container16 {
     width: 100%;
     align-self: flex-start;
     align-items: flex-start;
@@ -313,10 +333,10 @@ html {
     height: 19px;
     opacity: 0;
   }
-  .home-container11 {
+  .home-container13 {
     width: 50%;
   }
-  .home-container12 {
+  .home-container14 {
     left: -4px;
     width: 50%;
     bottom: -447px;
@@ -329,14 +349,14 @@ html {
   .home-container04 {
     height: 63px;
   }
-  .home-container10 {
+  .home-container12 {
     height: 885px;
   }
-  .home-container11 {
+  .home-container13 {
     width: 479px;
     height: 50%;
   }
-  .home-container12 {
+  .home-container14 {
     top: 443px;
     left: 0px;
     width: 479px;
@@ -344,3 +364,4 @@ html {
     margin-right: 0px;
   }
 }
+

@@ -32,8 +32,6 @@ d3.json(optionURL).then(jsonData => {
     crimeCats.forEach(crimeCat => {
         ddCrime.append("option").text(crimeCat).property("value", crimeCat);
     });
-    
-    //ddCrime.multiselect();
 
     
     // The dropdown menu (<select> HTML element from the HTML file) with ID 'selArea' is referenced and stored in a new Constant
@@ -51,12 +49,34 @@ d3.json(optionURL).then(jsonData => {
         ddArea.append("option").text(areaName).property("value", areaName);
     });    
 
-    //ddArea.multiselect();
+
+    $(document).ready(function() {
+        $('#selArea').multiselect({
+            nonSelectedText:'Area',
+            allSelectedText: "All areas",
+        });
+    
+        $('#selCrime').multiselect({
+            nonSelectedText:'Crime',
+            allSelectedText: "All crimes",
+        });
+    });
+    
+    var year_slider = new rSlider({
+        target: '#year',
+        values: [2020, 2021, 2022, 2023, 'Latest'],
+        range: true,
+        tooltip: false,
+        scale: true,
+        labels: true,
+        set: [2022, 2023],
+        width: '300%'
+    });
 
     
     // Initialise all plots & display using the first (default) nameID element from the array
     // By default, the dropdown menu will also have the first nameID element selected
-    init_AllPlots(nameIDs[0], myData)
+    // init_AllPlots(nameIDs[0], myData)
     
 });
 

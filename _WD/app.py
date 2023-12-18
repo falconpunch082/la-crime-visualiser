@@ -16,7 +16,7 @@ from flask_cors import CORS
 #################################################
 
 username = "postgres"
-password = "1234567"
+password = "Mirainoyume312!"
 host = "localhost"
 port = "5432"
 db_name = "crime_db"
