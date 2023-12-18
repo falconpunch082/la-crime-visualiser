@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Metadata -->
+    <!-- Metadata -->>
     <title>Los Angeles Crime Visualiser</title>
+    <meta property="og:title" content="Ambitious Disguised Fox" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
 
-    <!-- Code to reset default browser styles -->
+    <!-- Code to reset default browser styles-->>
     <style data-tag="reset-style-sheet">
       html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
     </style>
 
-    <!-- Code to set default styles for HTML and body elements -->
+    <!-- Code to set default styles for HTML and body elements-->
     <style data-tag="default-style-sheet">
       html {
         font-family: Inter;
@@ -31,7 +32,7 @@
       }
     </style>
 
-    <!-- Code to call necessary fonts-->
+    <!-- Fonts -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
@@ -48,86 +49,158 @@
       data-tag="font"
     />
 
-    <!-- CSS code call -->
-    <link href="./static/css/index.css" rel="stylesheet" />
+    <!-- Bootstrap CSS and JS for carousel-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <!-- Twitter Bootstrap and jQuery for Multiselect -->
+    <link rel="stylesheet" href="./static/css/bootstrap-4.5.2.min.css" type="text/css"/>
+    <script type="text/javascript" src="./static/js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="./static/js/bootstrap.bundle-4.5.2.min.js"></script>
+
+    <!-- Multiselect Plugin's CSS and JS: -->
+    <script type="text/javascript" src="./static/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="./static/css/bootstrap-multiselect.css" type="text/css"/>
+
+    <!-- rSlider Library's CSS and JS-->
+    <link rel="stylesheet" href="./static/css/rSlider.css">
+    <script src="./static/js/rSlider.js"></script>
+
+    <!-- Leaflet CSS-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Website CSS -->>
+    <link href="./static/css/index.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript">
+      $(window).on('load', function() {
+          $('#welcome-popup').modal('show');
+      });
+    </script>
+
   </head>
   <body>
-    <div>
-      <div class="home-container">
-        <!-- This div contains everything visible -->
-        <div id="visualisation" class="home-container1">
-          <!-- This div is where the Leaflet map will be placed -->>
-          <div id="map" class="home-container2"></div>
-          <!-- 
+
+    <!-- Welcome popup will load upon page startup-->
+    <div id="welcome-popup" class="modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Welcome to the Los Angeles Crime Visualiser!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              This website shows where crimes have occurred in Los Angeles from 2020 to present day, as well
+              as some data visualisations! <br>
+              Feel free to change the filters based on area, crime and time range! <br>
+              To look at how this works, head to <a href="https://github.com/falconpunch082/la-crime-visualiser">the GitHub Repo</a>! <br>
+              To access the API we made for these visualisations, head over here!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-container">
+      <!--This div contains everything visible -->
+      <div id="visualisation" class="home-container01">
+        <!-- This div is where the Leaflet map lives -->
+        <div id="map-container" class="home-container02">
+          <div id="crime-map"></div>
+        </div>
+        <!-- 
           This div is where the summary charts will be placed.
           This div is divided into search div and chart div.
-          -->
-          <div id="summary" class="home-container3">
-            <!-- This is where the dropdown menus live -->
-            <div id="search" class="home-container4">
-              <h3 class="home-text">SEARCH</h3>
-              <!-- Area dropdown -->
-              <select id="area" class="home-select">
-                <option value="null">Area</option>
-                <option value="Central">CENTRAL</option>
-                <option value="Rampart">RAMPART</option>
-                <option value="Southwest">SOUTHWEST</option>
-                <option value="Hollenback">HOLLENBACK</option>
-                <option value="Harbor">HARBOR</option>
-                <option value="Hollywood">HOLLYWOOD</option>
-                <option value="Wilshire">WILSHIRE</option>
-                <option value="West LA">WEST LA</option>
-                <option value="Van Nuys">VAN NUYS</option>
-                <option value="West Valley">WEST VALLEY</option>
-                <option value="Northeast">NORTHEAST</option>
-                <option value="77th Street">77TH STREET</option>
-                <option value="Newton">NEWTON</option>
-                <option value="Pacific">PACIFIC</option>
-                <option value="N Hollywood">NORTH HOLLYWOOD</option>
-                <option value="Foothill">FOOTHILL</option>
-                <option value="Devonshire">DEVONSHIRE</option>
-                <option value="Southeast">SOUTHEAST</option>
-                <option value="Mission">MISSION</option>
-                <option value="Olympic">OLYMPIC</option>
-                <option value="Topanga">TOPANGA</option>
-              </select>
-              <!-- Crime dropdown -->
-              <select id="crime" class="home-select1">
-                <option value="null" selected="">Crime</option>
-                <option value="CRIMINAL HOMICIDE">
-                  110 - CRIMINAL HOMICIDE
-                </option>
-                <option value="MANSLAUGHTER, NEGLIGENT">
-                  113 - MANSLAUGHTER, NEGLIGENT
-                </option>
-                <option value="RAPE, FORCIBLE">121 - RAPE, FORCIBLE</option>
-                <option value="RAPE, ATTEMPTED">122 - RAPE, ATTEMPTED</option>
-                <option value="ROBBERY">210 - ROBBERY</option>
-                <option value="ATTEMPTED ROBBERY">
-                  220 - ATTEMPTED ROBBERY
-                </option>
-                <option value="ASSAULT WITH DEADLY WEAPON, AGGRAVATED">
-                  230 - ASSAULT WITH DEADLY WEAPON, AGGRAVATED
-                </option>
-                <option value=" ASSAULT WITH DEADLY WEAPON ON POLICE">
-                  231 - ASSAULT WITH DEADLY WEAPON ON POLICE
-                </option>
-                <option value="CHILD ABUSE (PHYSICAL) - AGGRAVATED ASSAULT">
-                  235 - CHILD ABUSE (PHYSICAL) - AGGRAVATED ASSAULT
-                </option>
-              </select>
+        -->
+        <div id="summary-container" class="home-container03">
+          <!-- This div is where the filter inputs live -->
+          <div id="search" class="home-container04">
+            <!-- This div is where the dropdown menus and the filter text live -->
+            <div id="dropdown-section" class="home-container05">
+              <!-- Filter text container -->
+              <div id="filter-box" class="home-container06">
+                <h3 id="filter-text" class="home-text">FILTER</h3>
+              </div>
+              <!-- Area dropdown container made with bootstrap-multiselect -->
+              <div id="area-box" class="home-container07">
+                <select id="area" class="home-select" multiple="multiple">
+                  <option value="Central">CENTRAL</option>
+                  <option value="Rampart">RAMPART</option>
+                  <option value="Southwest">SOUTHWEST</option>
+                  <option value="Hollenback">HOLLENBACK</option>
+                </select>
+              </div>
+              <!-- Crime dropdown container made with bootstrap-multiselect -->
+              <div id="crime-box" class="home-container08">
+                <select id="crime" class="home-select1" multiple="multiple">
+                  <option value="CRIMINAL HOMICIDE">110 - CRIMINAL HOMICIDE</option>
+                  <option value="MANSLAUGHTER, NEGLIGENT">113 - MANSLAUGHTER, NEGLIGENT</option>
+                  <option value="RAPE, FORCIBLE">121 - RAPE, FORCIBLE</option>
+                  <option value="RAPE, ATTEMPTED">122 - RAPE, ATTEMPTED</option>
+                </select>
+              </div>
             </div>
-            <!-- 
-            This is the div where the charts live.
-            This div contains two divs for each chart.
-            -->
-            <div id="chart" class="home-container5">
-              <div id="chart-1" class="home-container6"></div>
-              <div id="chart-2" class="home-container7"></div>
+            <!-- This div is where the slider lives -->
+            <div id="slider" class="home-container09">
+              <!-- rSlider will convert this text input into a slider -->
+              <input type="text" id="year"/>
+            </div>
+          </div>
+          <!-- This is where the charts and cards live -->
+          <div id="charts-and-cards" class="home-container10">
+            <!-- Charts container -->
+            <div id="chart-gallery-container" class="home-container11">
+              <!-- Charts are within a carousel -->
+              <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicators for easy access -->
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <!-- Actual contents-->
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="./static/placeholder.jpg" class="d-block w-100">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="./static/placeholder2.webp" class="d-block w-100">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="./static/placeholder3.jpg" class="d-block w-100">
+                  </div>
+                </div>
+                <!-- Left and right buttons to control carousel-->
+                <button class="carousel-control-prev" type="button" data-bs-target="#chart-carousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#chart-carousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+            <!-- This div is where the cards live -->
+            <div id="cards" class="home-container12">
+              <div class="home-container13"></div>
+              <div class="home-container14"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!--Leaflet JS-->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- D3.js for API call -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Input JS-->
+    <script src="./static/js/input.js"></script>
+    <script src="./static/js/visualisation-map.js"></script>
   </body>
 </html>
