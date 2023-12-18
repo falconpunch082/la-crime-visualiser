@@ -5,9 +5,9 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, jsonify, render_template
-
+import os
 ########################  SQLAlchemy database setup   #############################
-
+print(os.environ.items())
 #Create connecton to the cloud PostgreSQL database in Neon
 engine = create_engine("postgresql://talieh.sh.mail:WHnC3zMy8wsT@ep-curly-waterfall-09913600.us-east-2.aws.neon.tech/LA_Crime_Data?sslmode=require")
 
