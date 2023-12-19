@@ -15,13 +15,13 @@ To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data
 
 **Contributors**
 
-- Michael Zabala (michaelz-id): Data extraction, cleaning and manipulation + database hosting with [neon.tech](https://neon.tech/).
+- Michael Zabala (michaelz-id): Data extraction, cleaning and manipulation + database hosting.
 
-- Talieh Sheikholeslami (Talieh-Sh): Creation of Python Flask API providing data from created database for visualisations + implementation of [Frozen-Flask](https://pypi.org/project/Frozen-Flask/).
+- Talieh Sheikholeslami (Talieh-Sh): Creation of Python Flask API providing data from created database for visualisations.
 
-- Wassim Deen (wdeen) and Nicholas Dale (falconpunch082): Data visualisation using data from created Flask API (Leaflet map, summary charts with [charts.js](https://www.chartjs.org/)).
+- Wassim Deen (wdeen) and Nicholas Dale (falconpunch082): Data visualisation using data from created Flask API (Leaflet map, summary charts).
 
-- Nicholas Dale (falconpunch082): Frontend (responsive HTML + CSS) with help from [teleport.io](https://teleporthq.io/), and implementation of input solutions using [bootstrap](https://getbootstrap.com/), [bootstrap-multiselect](https://github.com/davidstutz/bootstrap-multiselect) and [rSlider](https://github.com/slawomir-zaziablo/range-slider/tree/master).
+- Nicholas Dale (falconpunch082): Frontend (responsive HTML + CSS), and implementation of input solutions.
 
 ---
 
@@ -29,13 +29,15 @@ To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data
 
 - Python (SQL database generation and Flask).
 
-- PostgresSQL + neon.tech.
+- PostgresSQL + [neon.tech](https://neon.tech/).
 
-- HTML + CSS (with assistance from teleporthq.io).
+- HTML + CSS (with assistance from [teleport.io](https://teleporthq.io/)).
 
-- Javascript libraries like Leaflet, charts.js and rSlider.js.
+- Javascript libraries like Leaflet, [charts.js](https://www.chartjs.org/), [rSlider](https://github.com/slawomir-zaziablo/range-slider/tree/master) and [heatmap.js](https://www.patrick-wied.at/static/heatmapjs/plugin-leaflet-layer.html).
 
-- Bootstrap and the bootstrap-multiselect library.
+- [Bootstrap](https://getbootstrap.com/) and the [bootstrap-multiselect](https://github.com/davidstutz/bootstrap-multiselect) library.
+
+- Leaflet libaries like [markercluster](https://github.com/Leaflet/Leaflet.markercluster), [FeatureGroup.SubGroup](https://github.com/ghybs/Leaflet.FeatureGroup.SubGroup?tab=readme-ov-file), and [leaflet-heatmap](https://www.patrick-wied.at/static/heatmapjs/example-heatmap-leaflet.html).
 
 ---
 
