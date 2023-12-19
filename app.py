@@ -6,8 +6,16 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, jsonify, render_template
 import os
-########################  SQLAlchemy database setup   #############################
+
+
+#By printing os.environ.items(), you are inspecting and displaying all the environment variables 
+#that are currently set on your system at that moment. 
+#This can be helpful for debugging or understanding the environment in which your Flask application is running
 print(os.environ.items())
+
+
+########################  SQLAlchemy database setup   #############################
+
 #Create connecton to the cloud PostgreSQL database in Neon
 engine = create_engine("postgresql://talieh.sh.mail:WHnC3zMy8wsT@ep-curly-waterfall-09913600.us-east-2.aws.neon.tech/LA_Crime_Data?sslmode=require")
 
@@ -30,6 +38,7 @@ def beginning():
     #     "/api/v1.0/crimes<br/>"
     #     "/api/v1.0/summary<br/>"
     #     "/api/v1.0/summary_yearly_monthly_area_crime_description"
+    #     "/api/v1.0/filter_options<br/>"
     # )
     return render_template("homepage.html")
 # Flask route to retrieve crimes data
@@ -139,6 +148,73 @@ def summary_yearly_monthly_area_crime_description():
     return jsonify(summary_data)
 
 ########
+
+@app.route("/api/v1.0/filter_options")
+def filter_options():
+    crime_data_2 = Base.classes.crime_data_2
+    session = Session(engine)
+
+    # Query to get unique years, crime descriptions, and area names
+    unique_years = session.query(func.extract('year', crime_data_2.date_occurred).label('year')).distinct().order_by('year').all()
+    unique_categories = session.query(crime_data_2.crime_description.distinct().label('crime_description')).order_by('crime_description').all()
+    unique_areas = session.query(crime_data_2.area_name.distinct().label('area_name')).order_by('area_name').all()
+
+    session.close()
+
+    # Format the results into JSON
+    filter_options_data = {
+        'years': [year[0] for year in unique_years],
+        'categories': [category[0] for category in unique_categories],
+        'areas': [area[0] for area in unique_areas]
+    }
+
+    return jsonify(filter_options_data)
+###########
+@app.route("/api/v1.0/<int:startyear>/<int:endyear>/<string:crimes>/<string:areas>")
+def filtered_data(startyear, endyear, crimes, areas):
+    crime_data_2 = Base.classes.crime_data_2
+    session = Session(engine)
+
+    # Define query filters based on provided parameters
+    filters = []
+    if startyear:
+        filters.append(func.extract('year', crime_data_2.date_occurred) >= startyear)
+    if endyear:
+        filters.append(func.extract('year', crime_data_2.date_occurred) <= endyear)
+    if crimes:
+        crime_list = crimes.split(',')
+        filters.append(crime_data_2.crime_description.in_(crime_list))
+    if areas:
+        area_list = areas.split(',')
+        filters.append(crime_data_2.area_name.in_(area_list))
+
+    # Query the database with the applied filters and select the desired fields
+    filtered_results = session.query(
+        crime_data_2.crime_description.label('crime'),
+        crime_data_2.area_name.label('area'),
+        crime_data_2.latitude.label('lat'),
+        crime_data_2.longitude.label('long'),
+        func.extract('year', crime_data_2.date_occurred).label('year')
+    ).filter(*filters).all()
+
+    session.close()
+
+    # Prepare the filtered data for JSON response
+    filtered_data = []
+    for data in filtered_results:
+        # Create a dictionary for each record
+        filtered_record = {
+            "Crime": data.crime,
+            "Area": data.area,
+            "Lat": data.lat,
+            "Long": data.long,
+            "Year": data.year
+        }
+        filtered_data.append(filtered_record)
+
+    return jsonify(filtered_data)
+
+##############
 
 
 # Run the Flask app
