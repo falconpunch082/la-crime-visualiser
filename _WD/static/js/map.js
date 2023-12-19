@@ -147,7 +147,7 @@ d3.json(callAllURL).then(jsonData => {
                             center: [33.956174824512914,  -118.2116044755473],
                             zoom: 11,
                             minZoom: 9,
-                            maxZoom: 20,
+                            maxZoom: 18,
                             layers: [street, marks]
                             }
                         );
