@@ -3,7 +3,6 @@
   <head>
     <!-- Metadata -->>
     <title>Los Angeles Crime Visualiser</title>
-    <meta property="og:title" content="Ambitious Disguised Fox" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
 
@@ -69,6 +68,10 @@
 
     <!-- Leaflet CSS-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Marker Cluster CSS-->
+    <link href="./static/css/MarkerCluster.css" rel="stylesheet" type="text/css"/>
+    <link href="./static/css/MarkerCluster.Default.css" rel="stylesheet" type="text/css"/>
 
     <!-- Website CSS -->>
     <link href="./static/css/index.css" rel="stylesheet" type="text/css"/>
@@ -200,10 +203,16 @@
     </div>
     <!--Leaflet JS-->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Marker cluster JS code -->
+    <script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.0.3/dist/leaflet.markercluster.js"></script>
+    <script src="./static/js/leaflet.featuregroup.subgroup.js"></script>
+    <!-- Heatmap JS code-->
+    <script src="./static/js/heatmap.js"></script>
+    <script src="./static/js/leaflet-heatmap.js"></script>
     <!-- D3.js for API call -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- Input JS-->
-    <script src="./static/js/map.js"></script>
     <script src="./static/js/visualisations.js"></script>
+    <script src="./static/js/map.js"></script>
   </body>
 </html>

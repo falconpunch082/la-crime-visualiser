@@ -49,7 +49,7 @@ d3.json(optionURL).then(jsonData => {
         ddArea.append("option").text(areaName).property("value", areaName);
     });    
 
-
+    // After appending options into dropdown, initialise multiselect
     $(document).ready(function() {
         $('#selArea').multiselect({
             nonSelectedText:'Area',
@@ -62,6 +62,7 @@ d3.json(optionURL).then(jsonData => {
         });
     });
     
+    // Creating year slider
     var year_slider = new rSlider({
         target: '#year',
         values: [2020, 2021, 2022, 2023, 'Latest'],
