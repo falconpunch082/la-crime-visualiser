@@ -155,14 +155,20 @@ def filter_options():
     unique_years = session.query(func.extract('year', crime_data_updated.date_occured).label('year')).distinct().order_by('year').all()
     unique_categories = session.query(crime_data_updated.crime_category.distinct().label('crime_category')).order_by('crime_category').all()
     unique_areas = session.query(crime_data_updated.area_name.distinct().label('area_name')).order_by('area_name').all()
+    unique_sex = session.query(crime_data_updated.victim_sex.distinct().label('victim_sex')).order_by('victim_sex').all()
+    unique_victim_descent_name = session.query(crime_data_updated.victim_descent_name.distinct().label('victim_descent_name')).order_by('victim_descent_name').all()
+    unique_victim_age = session.query(crime_data_updated.victim_age.distinct().label('victim_age')).order_by('victim_age').all()
 
     session.close()
 
     # Format the results into JSON
     filter_options_data = {
-        'years': [year[0] for year in unique_years],
-        'categories': [category[0] for category in unique_categories],
-        'areas': [area[0] for area in unique_areas]
+        'Years': [year[0] for year in unique_years],
+        'Categories': [category[0] for category in unique_categories],
+        'Areas': [area[0] for area in unique_areas],
+        'Victim sex': [sex[0] for sex in unique_sex],
+        'Victim descent': [descent[0] for descent in unique_victim_descent_name],
+        'Victim age': [age[0] for age in unique_victim_age]
     }
 
     return jsonify(filter_options_data)
@@ -188,9 +194,18 @@ def filtered_data(startyear, endyear, crime_category, areas):
     # Query the database with the applied filters and select the desired fields
     filtered_results = session.query(
         crime_data_updated.crime_category.label('crime_category'),
+        crime_data_updated.crime_description.label('crime_description'),
         crime_data_updated.area_name.label('area'),
+        crime_data_updated.premis_desc.label('premis_desc'),
+        crime_data_updated.location.label('location'),
         crime_data_updated.lat.label('lat'),
-        crime_data_updated.lon.label('long'),
+        crime_data_updated.lon.label('lon'),
+        crime_data_updated.victim_sex.label('victim_sex'),
+        crime_data_updated.victim_age.label('victim_age'),
+        crime_data_updated.date_reported.label('date_reported'),
+        crime_data_updated.date_occured.label('date_occured'),
+        crime_data_updated.time_occured.label('time_occured'),
+        crime_data_updated.victim_descent_name.label('victim_descent_name'),
         func.extract('year', crime_data_updated.date_occured).label('year')
     ).filter(*filters).all()
 
@@ -199,12 +214,24 @@ def filtered_data(startyear, endyear, crime_category, areas):
     # Prepare the filtered data for JSON response
     filtered_data = []
     for data in filtered_results:
+        # Format time_occured correctly
+        time_occured_formatted = "{:02}:{:02}:00".format(data.time_occured // 100, data.time_occured % 100)
+
         # Create a dictionary for each record
         filtered_record = {
-            "crime_category": data.crime_category,
+            "Crime category": data.crime_category,
+            "Crime description": data.crime_description,
             "Area": data.area,
+            "Premis desc": data.premis_desc,
+            "Location": data.location,
             "Lat": data.lat,
-            "Long": data.long,
+            "Lon": data.lon,
+            "Victim sex":data.victim_sex,
+            "Victim age":data.victim_age,
+            "Victim Ethnicity":data.victim_descent_name,
+            "Date reported":data.date_reported,
+            "Date occured":data.date_occured,
+            "Time occured":time_occured_formatted,
             "Year": data.year
         }
         filtered_data.append(filtered_record)
