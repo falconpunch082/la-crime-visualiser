@@ -9,7 +9,7 @@
 }
 .rs-container {
     font-family: Arial, Helvetica, sans-serif;
-    height: 45px;
+    height: 100%;
     position: relative;
 }
 .rs-container .rs-bg, .rs-container .rs-selected {
@@ -74,12 +74,16 @@
     position: absolute;
     top: 5px;
     white-space: nowrap;
+    height: 100%;
+    width: calc(100% - 30px); /* Adjust the width to be slightly smaller */ 
 }
 .rs-container .rs-scale span {
-    float: left;
     position: relative;
+    display: inline-block;
+    width: auto; /* Allow spans to take their natural width */
 }
  .rs-container .rs-scale span::before {
+    /* Keep the ruler lines within the visible area */
     background-color: #ededed;
     content: "";
     height: 8px;
@@ -105,6 +109,7 @@
     font-size: 12px;
     margin-top: 20px;
     text-decoration: none;
+    white-space: nowrap; /* Prevent text wrapping */
 }
 .rs-container.disabled .rs-scale span ins {
     color: #999;

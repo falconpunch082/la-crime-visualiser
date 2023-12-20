@@ -23,7 +23,7 @@ d3.json(optionURL).then(jsonData => {
     // The array of all crime category elements from the 'crime_categories' key of the JSON dataset is stored in a new Constant
     // CHANGE HERE
     const ddCrime = d3.select("#selCrime");
-    const crimeCats = optionData.crime_categories;
+    const crimeCats = optionData.crime_categories; //nyan nyan~ meow meow~
 
     // For every crimeCat element in the array of crimeCats...
     // Append the list of options in the dropdown menu with the current crimeCat element where...
@@ -33,15 +33,11 @@ d3.json(optionURL).then(jsonData => {
         ddCrime.append("option").text(crimeCat).property("value", crimeCat);
     });
     
-    //ddCrime.multiselect();
-
-    
     // The dropdown menu (<select> HTML element from the HTML file) with ID 'selArea' is referenced and stored in a new Constant
     // The array of all area name elements from the 'area_names' key of the JSON dataset is stored in a new Constant
     // CHANGE HERE
     const ddArea = d3.select("#selArea");
     const areaNames = optionData.area_names;
-
 
     // For every crimeCat element in the array of crimeCats...
     // Append the list of options in the dropdown menu with the current crimeCat element where...
@@ -51,12 +47,55 @@ d3.json(optionURL).then(jsonData => {
         ddArea.append("option").text(areaName).property("value", areaName);
     });    
 
-    //ddArea.multiselect();
+    // After appending options into dropdown, initialise multiselect
+    $(document).ready(function() {
+        $('#selArea').multiselect({
+            enableResetButton: true,
+            nonSelectedText:'Area',
+            nSelectedText  : "Area(s)",
+            allSelectedText: "All areas",
+            numberDisplayed: 0.5 // Set to 0.5 instead to 0 to avoid disabling summary text
+        });
 
+        $('#selCrime').multiselect({
+            enableResetButton: true,
+            nonSelectedText:'Crime',
+            nSelectedText  : "Crime(s)",
+            allSelectedText: "All crimes",
+            numberDisplayed: 0.5 
+        });
+    });
     
+    // Creating year slider
+    var year_slider = new rSlider({
+        target: '#year',
+        values: [2020, 2021, 2022, 2023, 'Now'],
+        range: true,
+        tooltip: false,
+        scale: true,
+        labels: true,
+        set: [2022, 2023],
+        width: '300%'
+    });
+
+    function query(event) {
+        // determining value chosen using jQuery
+        let area_sel = $('#selArea option:selected').map(function(a, item){return item.value;});;
+        let crime_sel = $('#selCrime option:selected').map(function(a, item){return item.value;});;
+        let year_range = year_slider.getValue();
+
+        console.log(area_sel);
+        console.log(crime_sel);
+        console.log(year_range);
+    }
+
+    // Button event listener
+    d3.select("#query").on("click", query);
+
+
     // Initialise all plots & display using the first (default) nameID element from the array
     // By default, the dropdown menu will also have the first nameID element selected
-    init_AllPlots(nameIDs[0], myData)
+    // init_AllPlots(nameIDs[0], myData)
     
 });
 

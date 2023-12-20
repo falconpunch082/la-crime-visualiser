@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Metadata -->>
+    <!-- Metadata -->
     <title>Los Angeles Crime Visualiser</title>
-    <meta property="og:title" content="Ambitious Disguised Fox" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
 
-    <!-- Code to reset default browser styles-->>
+    <!-- Code to reset default browser styles-->
     <style data-tag="reset-style-sheet">
       html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
     </style>
@@ -63,15 +62,20 @@
     <script type="text/javascript" src="./static/js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="./static/css/bootstrap-multiselect.css" type="text/css"/>
 
-    <!-- rSlider Library's CSS and JS-->
+    <!-- rSlider Library's CSS and JS -->
     <link rel="stylesheet" href="./static/css/rSlider.css">
-    <script src="./static/js/rSlider.js"></script>
+    <script src="./static/js/rSlider.js"></script> 
 
     <!-- Leaflet CSS-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-    <!-- Website CSS -->>
+    <!-- Marker Cluster CSS-->
+    <link href="./static/css/MarkerCluster.css" rel="stylesheet" type="text/css"/>
+    <link href="./static/css/MarkerCluster.Default.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Website CSS -->
     <link href="./static/css/index.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="./static/css/style.css" />
 
     <script type="text/javascript">
       $(window).on('load', function() {
@@ -121,30 +125,42 @@
           <!-- This div is where the filter inputs live -->
           <div id="search" class="home-container04">
             <!-- This div is where the dropdown menus and the filter text live -->
-            <div id="dropdown-section" class="home-container05">
+            <div id="top-filter" class="home-container05">
               <!-- Filter text container -->
               <div id="filter-box" class="home-container06">
                 <h3 id="filter-text" class="home-text">FILTER</h3>
               </div>
               <!-- Area dropdown container made with bootstrap-multiselect -->
               <div id="area-box" class="home-container07">
-                <select id="selArea" class="home-select" onchange="optionChanged(this.value)" multiple="multiple"></select>
+                <select id="selArea" class="home-select" multiple="multiple">
+                  <!-- This section is automatically filled with options thanks to visualisations.js-->
+                </select>
               </div>
               <!-- Crime dropdown container made with bootstrap-multiselect -->
               <div id="crime-box" class="home-container08">
-                <select id="selCrime" class="home-select1" onchange="optionChanged(this.value)" multiple="multiple"></select>
+                <select id="selCrime" class="home-select1" multiple="multiple">
+                  <!-- This section is automatically filled with options thanks to visualisations.js-->
+                </select>
               </div>
             </div>
             <!-- This div is where the slider lives -->
-            <div id="slider" class="home-container09">
+            <div id="bottom-filter" class="home-container09">
               <!-- rSlider will convert this text input into a slider -->
-              <input type="text" id="year"/>
+              <div id="slider" class="home-container10">
+                <input type="text" id="year"/>
+              </div>
+              <!-- Button to start query once user has chosen what to search for -->
+              <div id="button-box" class="home-container11">
+                <button id="query" type="button" class="home-button button">
+                  Search
+                </button>
+              </div>
             </div>
           </div>
           <!-- This is where the charts and cards live -->
-          <div id="charts-and-cards" class="home-container10">
+          <div id="charts-and-cards" class="home-container12">
             <!-- Charts container -->
-            <div id="chart-gallery-container" class="home-container11">
+            <div id="chart-gallery-container" class="home-container13">
               <!-- Charts are within a carousel -->
               <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
                 <!-- Indicators for easy access -->
@@ -177,9 +193,9 @@
               </div>
             </div>
             <!-- This div is where the cards live -->
-            <div id="cards" class="home-container12">
-              <div class="home-container13"></div>
-              <div class="home-container14"></div>
+            <div id="cards" class="home-container14">
+              <div class="home-container15"></div>
+              <div class="home-container16"></div>
             </div>
           </div>
         </div>
@@ -187,14 +203,16 @@
     </div>
     <!--Leaflet JS-->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Marker cluster JS code -->
+    <script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.0.3/dist/leaflet.markercluster.js"></script>
+    <script src="./static/js/leaflet.featuregroup.subgroup.js"></script>
+    <!-- Heatmap JS code-->
+    <script src="./static/js/heatmap.js"></script>
+    <script src="./static/js/leaflet-heatmap.js"></script>
     <!-- D3.js for API call -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <!-- Chart.js for Visualisations-->
-    <script src="https://cdnjs.com/libraries/Chart.js"></script>    
     <!-- Input JS-->
-    <script src="./static/js/input.js"></script>
-    <script src="./static/js/map.js"></script>
     <script src="./static/js/visualisations.js"></script>
-
+    <script src="./static/js/map.js"></script>
   </body>
 </html>
