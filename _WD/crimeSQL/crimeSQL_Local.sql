@@ -1,7 +1,8 @@
 DROP TABLE IF EXISTS crime;
 
 CREATE TABLE crime (
-	dr_no INT NOT NULL PRIMARY KEY,
+	id INT NOT NULL PRIMARY KEY,
+	dr_no INT NOT NULL,
 	date_rptd DATE,
 	date_occ DATE,
 	time_occ INT,

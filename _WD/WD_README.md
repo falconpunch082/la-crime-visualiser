@@ -6,7 +6,51 @@
 
 **Changelog:**
 
-- [1st Pass for Testing] v0.1 End-to-end workflow process of Interactive Dashboard
+- [23/12/2023] v0.2 End-to-end workflow process of Interactive Dashboard (`la-crime-visualiser\_WD`)
+    - Deleted `map.js` file (`la-crime-visualiser\_WD\static\js`)
+        - Code from file transferred to `visualisations.js`
+    
+    - Updated `data_cleanup_WD.ipynb`
+        - Utilised App Token key for API call (`api_keys.py`)
+        - Extracted the full LA Crime Dataset (`full_crime_data.csv`)
+            - Stored in ZIP folder to push to repo (`full_crime_data.zip`)
+        
+    - Updated `crimeSQL_Local.sql`
+        - `id` is now PRIMARY KEY
+        - Additional tweaks to the schema in order to import the full LA Crime Dataset
+    
+    - Updated `index.html`
+        - Re-added - Added Chart.js library as CDN in `<body>`
+        - Images in Carousel replaced with `<div>` elements to house the Chart JS plots (`jsChart_TimeSeries` / `jsChart_Bar` / `jsChart_Pie`)
+        - Updated id tag for `<input>` element in 'Slider'object (`selYear`)
+        - Updated id tag for `<button>` element (`runQuery`)
+            - Also tweaked text appearance
+        - Removed `<script>` element for `map.js`
+            - Code merged into `visualisations.js`
+
+    - Updated `app.py`
+        - Deleted 'All Data' API Route (`/api/v1.0/all_data`)
+        - Added 'Sample Data' API Route (`/api/v1.0/sample_data`)
+        - Added 'Filtered Data' Dynamic API Route (`/api/v1.0/<years_str>/<area_names_str>/<crime_categories_str>`)
+        - Added 'Test' API Route (`/api/v1.0/test`)
+            - For debugging purposes; to be deleted...
+
+    - Updated `visualisations.js`
+        - [UPDATED] StartUp now pre-selects the first two options for Year/Area/Crime
+        - [NEW] All code from `map.js` added to new function (`init_Map`)
+        - [NEW] Startup now programmatically triggers the button to initialise all visualisations
+        - [NEW] Skeleton functions for the Chart JS plots (`init_PieChart` / `init_BarChart` / `init_TimeSeries`)
+        - [NEW] In startup, fully defined 'Query' function (`runQuery`)
+            - [UPDATED] Returns current selection(s) from 'Area Names' dropdown w/ URIEncoding
+            - [UPDATED] Returns current selection(s) from 'Crime Categories' dropdown w/ URIEncoding
+            - [NEW] Returns current selection(s) from 'Year' slider
+            - [NEW] Dynamically generate & call customised URL for the dynamic Flask API route 
+            - [NEW] Centralised function to initialise all visualisations (`init_AllVisuals(queryData)`)
+            
+    
+
+
+- [18/12/2023] v0.1 End-to-end workflow process of Interactive Dashboard
     - Changes to HTML file `(la-crime-visualiser\_WD\index.html)`
         - Added CDN to Chart.js library in `<body>`
         - Added visualisation Javascript solution file `(visualisations.js)`
@@ -22,9 +66,7 @@
 
 **TODO**
 
-1. [On Startup] Populate all Unique Years to Slider HTML Bootstrap element (`visualisations.js`)
-    - Inspect into the build of said item (`rSlider.css` / `rSlider.js` / `index.html`)
-2. [Overall Work] Utilise Chart.js library to generate pre-agreed visualisations and display on front-end interactive dashboard
+1. [Overall Work] Utilise Chart.js library to generate pre-agreed visualisations and display on front-end interactive dashboard
 
 
 **NOTES**

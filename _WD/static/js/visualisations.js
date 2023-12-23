@@ -4,8 +4,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 */
 
-// Define variable to store the fetched JSON Dataset; used beyond Step #1
-let crimeData;
+// Define variable to store the filtered query JSON Dataset
+let queryData;
 
 // Get URL of the Python Flask API as Constant; not going to be altered
 const apiURL = 'http://127.0.0.1:5000';
@@ -13,36 +13,33 @@ const apiURL = 'http://127.0.0.1:5000';
 const optionAPI = '/api/v1.0/filter_options'
 const optionURL = apiURL + optionAPI
 
-// Using D3, fetch the Belly Button Biodiversity (JSON) Dataset from the specified URL 
+// Using D3, fetch the JSON Dataset from the specified URL 
 // Once successful, THEN pass through the loaded JSON dataset as an argument to the following callback function where...
 d3.json(optionURL).then(jsonData => {
     // The loaded JSON Dataset is stored in the nominated variable
-    optionData = jsonData;
+    const optionData = jsonData;
   
-    // The dropdown menu (<select> HTML element from the HTML file) with ID 'selCrime' is referenced and stored in a new Constant
+    // The dropdown menus (<select> HTML element from the HTML file) with ID 'selCrime' and 'selArea' is referenced and stored in new Constants
     // The array of all crime category elements from the 'crime_categories' key of the JSON dataset is stored in a new Constant
-    // CHANGE HERE
+    // Similarly, the array of all area name elements from the 'area_names' key of the JSON dataset is stored in a new Constant
     const ddCrime = d3.select("#selCrime");
-    const crimeCats = optionData.crime_categories; //nyan nyan~ meow meow~
+    const crimeCats = optionData.crime_categories;
 
-    // For every crimeCat element in the array of crimeCats...
-    // Append the list of options in the dropdown menu with the current crimeCat element where...
-    // The display text of the appended option is the current crimeCat element
-    // The value property of the appended option is also the current crimeCat element
-    crimeCats.forEach(crimeCat => {
-        ddCrime.append("option").text(crimeCat).property("value", crimeCat);
-    });
-    
-    // The dropdown menu (<select> HTML element from the HTML file) with ID 'selArea' is referenced and stored in a new Constant
-    // The array of all area name elements from the 'area_names' key of the JSON dataset is stored in a new Constant
-    // CHANGE HERE
     const ddArea = d3.select("#selArea");
     const areaNames = optionData.area_names;
 
+    const calYears = optionData.years;
+
     // For every crimeCat element in the array of crimeCats...
     // Append the list of options in the dropdown menu with the current crimeCat element where...
-    // The display text of the appended option is the current crimeCat element
-    // The value property of the appended option is also the current crimeCat element
+    // The display text & value property of the appended option is the current crimeCat element
+    crimeCats.forEach(crimeCat => {
+        ddCrime.append("option").text(crimeCat).property("value", crimeCat);
+    });
+
+    // For every crimeCat element in the array of crimeCats...
+    // Append the list of options in the dropdown menu with the current crimeCat element where...
+    // The display text & value property of the appended option is the current crimeCat element
     areaNames.forEach(areaName => {
         ddArea.append("option").text(areaName).property("value", areaName);
     });    
@@ -55,7 +52,7 @@ d3.json(optionURL).then(jsonData => {
             nSelectedText  : "Area(s)",
             allSelectedText: "All areas",
             numberDisplayed: 0.5 // Set to 0.5 instead to 0 to avoid disabling summary text
-        });
+        }).multiselect('select', [areaNames[0], areaNames[1]]);
 
         $('#selCrime').multiselect({
             enableResetButton: true,
@@ -63,48 +60,270 @@ d3.json(optionURL).then(jsonData => {
             nSelectedText  : "Crime(s)",
             allSelectedText: "All crimes",
             numberDisplayed: 0.5 
-        });
+        }).multiselect('select', [crimeCats[0], crimeCats[1]]);
     });
     
     // Creating year slider
     var year_slider = new rSlider({
-        target: '#year',
-        values: [2020, 2021, 2022, 2023, 'Now'],
+        target: '#selYear',
+        values: calYears,
         range: true,
         tooltip: false,
         scale: true,
         labels: true,
-        set: [2022, 2023],
+        set: [calYears[0], calYears[1]],
         width: '300%'
     });
 
-    function query(event) {
-        // determining value chosen using jQuery
-        let area_sel = $('#selArea option:selected').map(function(a, item){return item.value;});;
-        let crime_sel = $('#selCrime option:selected').map(function(a, item){return item.value;});;
-        let year_range = year_slider.getValue();
+    const runQuery = (event) => {
+        // Return the values chosen using JQuery
+        // For the Multiselect dropdown menus, trim() is used for every selected value string item to remove any spacing from either ends prior to URI encoding
+        // encodeURIComponent() is used to replace the spacing in between the string item (e.g. "77th Street") with '%20' to be HTML format friendly (e.g. "77th%20Street")
+        let area_sel = $('#selArea option:selected').map(function(a, item){return encodeURIComponent(item.value.trim());}).get();
+        let crime_sel = $('#selCrime option:selected').map(function(a, item){return encodeURIComponent(item.value.trim());}).get();
+        let year_sel = year_slider.getValue();
 
-        console.log(area_sel);
-        console.log(crime_sel);
-        console.log(year_range);
-    }
+        // Concatenate elements from their respective array into string  
+        let area_str = area_sel.join(',');
+        let crime_str = crime_sel.join(',');
+        //let year_str = year_sel.join(',');
+
+
+        
+        //Use backticks (``) in order to output template literals i.e. output something like how f-strings are written in Python
+        let queryAPI = `/api/v1.0/${year_sel}/${area_str}/${crime_str}`;
+        let queryURL = apiURL + queryAPI;
+
+        d3.json(queryURL).then(jsonData => {
+            queryData = jsonData
+
+            init_AllVisuals(queryData);
+
+        });
+        
+
+        console.log(area_str);
+        console.log(crime_str);
+        console.log(year_sel);
+
+        console.log(queryURL);
+    
+    };   
 
     // Button event listener
-    d3.select("#query").on("click", query);
+    d3.select("#runQuery").on("click", runQuery);
 
+    // Programmatically trigger the Button click to initialise the visuals during startup
+    d3.select("#runQuery").node().click();
 
-    // Initialise all plots & display using the first (default) nameID element from the array
-    // By default, the dropdown menu will also have the first nameID element selected
-    // init_AllPlots(nameIDs[0], myData)
-    
 });
 
 
+// Function to initialise or reinitialise all visuals including the Leaflet Map and Chart JS plots
+const init_AllVisuals = (thisDataset) => {
+    // Initialise or Reinitialise the Leaflet Map
+    init_Map(thisDataset);
+    
+    // Initialise or Reinitialise the Time Series Plot (Using Chart.js)
+    init_TimeSeries(thisDataset);
 
-/*
-const optionChanged = (thisValue) => {
-// All plots in the interactive board are re-initialised when a new subject ID from the dropdown list is selected
-init_AllPlots(thisValue, myData);
-};
-*/
+    // Initialise or Reinitialise the Bar Chart (Using Chart.js)
+    init_BarChart(thisDataset);
   
+    // Initialise or Reinitialise the Pie Chart (Using Chart.js)
+    init_PieChart(thisDataset);
+};
+
+
+const init_Map = (thisDataset) => {
+        // Declaring resultData as the contents of pulled data's 'crime_data'
+        resultData = thisDataset.crime_data;
+
+        // Declaring empty marker cluster group variable to be filled later in for loop
+        let marks = L.markerClusterGroup();
+        // Declaring empty dataset to be used to generate heatmap
+        let hm_pts = [];
+    
+        // For every single datapoint gained from API call...
+        for(i = 0; i < resultData.length; i++) {
+            // Declaring variable that changes every iteration
+            let datapoint = resultData[i];
+    
+            // Declaring datapoints in dataset
+            let coords = [datapoint["lat"], datapoint["lon"]];
+            let area = datapoint["area_name"];
+            let category = datapoint["crime_category"];
+            let code = datapoint["crm_cd"];
+            let descp = datapoint["crm_cd_desc"];
+            let street = datapoint["location"];
+            let x_str = datapoint["cross_street"];
+            let occ_date = datapoint["date_occ"];
+            let occ_time = datapoint["time_occ"]
+            let rep = datapoint["date_rptd"];
+            let premise = datapoint["premis_desc"];
+            let age = datapoint["vict_age"];
+            let sex = datapoint["vict_sex"];
+            let descent = datapoint["vict_descent"];
+    
+            // Popup function to generate text seen when clicking on a marker
+            // Legend:
+            // cat - category of crime
+            // c_c - crime code
+            // c_d - description of crime
+            // ar - area where crime occured
+            // st - street where crime occured
+            // x - intersection
+            // p - description of premise where crime occured
+            // o_d - date of occurence
+            // o_t - time of occurence
+            // r - date reported
+            // ag - victim's age
+            // s - victim's biological sex
+            // d - victim's descent/ethnicity
+            function popup(cat, c_c, c_d, ar, st, x, p, o_d, o_t, r, ag, s, d) {
+                // This conditional generates a different location result depending on whether
+                // the crime happened near the intersection of the location street and another
+                // street. The grammar changes if x is present/not null.
+                if (x !== null) {
+                    return(
+                        `
+                        Category: ${cat} </br>
+                        Crime: ${c_c} - ${c_d} </br>
+                        <hr>
+                        Area: ${ar} </br>
+                        Location: On the corner of ${st} and ${x} </br>
+                        Premise description: ${p} </br>
+                        <hr>
+                        Date of occurence: ${o_d} </br>
+                        Time of occurence: ${o_t} </br>
+                        Date reported: ${r} </br>
+                        <hr>
+                        Victim details </br>
+                        Age: ${ag} </br>
+                        Biological sex: ${s} </br>
+                        Ethnicity: ${d}
+                        `
+                    )
+                } else {
+                    return(
+                        `
+                        Category: ${cat} </br>
+                        Crime: ${c_c} - ${c_d} </br>
+                        <hr>
+                        Area: ${ar} </br>
+                        Location: ${st} </br>
+                        Premise description: ${p} </br>
+                        <hr>
+                        Date of occurence: ${o_d} </br>
+                        Time of occurence: ${o_t} </br>
+                        Date reported: ${r} </br>
+                        <hr>
+                        Victim details </br>
+                        Age: ${ag} </br>
+                        Biological sex: ${s} </br>
+                        Ethnicity: ${d}
+                        `
+                    )
+                }
+            }
+    
+            // Pushing processed dataset into heatmap points list, with a set count of 1 (as only one crime is reported every iteration)
+            hm_pts.push({lat: datapoint["lat"], lng: datapoint["lon"], count: 1});
+            // Adding marker into cluster group with customised popup
+            marks.addLayer(L.marker(coords).bindPopup(popup(category, code, descp, area, street, x_str, premise, occ_date, occ_time, rep, age, sex, descent)));
+    
+        }
+    
+        // Setting tile layers
+        // Street view
+        let street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+                                    {
+                                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    }
+                                );
+        // Satelite view
+        let satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 
+                                    {
+                                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                                    }
+                                );
+        // Declaring base tile layers for layer control
+        let baseMaps = {
+            "Street View": street,
+            "Satelite View": satelite
+        }
+    
+        // Creating heatmap
+        // Creating parameters for heatmap to be created
+        let cfg = {
+            "radius": 40,
+            "useLocalExtrema": true,
+            valueField: 'count'
+        }
+        // Declaring new heatmap layer
+        let heatmap = new HeatmapOverlay(cfg);
+        // Feeding in heatmap points list into the cfg
+        heatmap.setData({
+            data: hm_pts
+        });
+        
+        // Declaring overlays for layer control
+        let overlayMaps = {
+            Markers: marks,
+            Heatmap: heatmap
+        }
+    
+        // Creating map
+        let crime_map = L.map("crime-map", 
+                                {
+                                center: [33.956174824512914,  -118.2116044755473],
+                                zoom: 11,
+                                minZoom: 9,
+                                maxZoom: 18,
+                                layers: [street, marks]
+                                }
+                            );
+        
+        // Creating layer control
+        L.control.layers(baseMaps, overlayMaps).addTo(crime_map);
+};
+
+
+// Using the Chart JS library, this callback function initialises a Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
+const init_TimeSeries = (thisDataset) => {
+
+    chartBar = d3.select('#jsChart_TimeSeries')
+
+
+};
+
+
+// Using the Chart JS library, this callback function initialises a Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
+const init_BarChart = (thisDataset) => {
+
+    chartBar = d3.select('#jsChart_Bar')
+
+    var options = {
+        scales: {
+            x: {stacked: true},
+            y: {stacked: true}
+        }
+    };
+    
+    // Create and render the chart using Chart.js
+    var ctx = chartContainer.node().getContext("2d");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: jsonData,
+        options: options
+    });
+
+};
+
+
+// Using the Chart JS library, this callback function initialises a Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
+const init_PieChart = (thisDataset) => {
+
+    chartBar = d3.select('#jsChart_Pie')
+
+};
