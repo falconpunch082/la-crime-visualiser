@@ -13,6 +13,7 @@ const apiURL = 'http://127.0.0.1:5000';
 const optionAPI = '/api/v1.0/filter_options'
 const optionURL = apiURL + optionAPI
 
+
 // Using D3, fetch the JSON Dataset from the specified URL 
 // Once successful, THEN pass through the loaded JSON dataset as an argument to the following callback function where...
 d3.json(optionURL).then(jsonData => {
@@ -27,96 +28,52 @@ d3.json(optionURL).then(jsonData => {
 
     const ddArea = d3.select("#selArea");
     const areaNames = optionData.area_names;
-
     const calYears = optionData.years;
 
-    // For every crimeCat element in the array of crimeCats...
-    // Append the list of options in the dropdown menu with the current crimeCat element where...
-    // The display text & value property of the appended option is the current crimeCat element
-    crimeCats.forEach(crimeCat => {
-        ddCrime.append("option").text(crimeCat).property("value", crimeCat);
-    });
+ 
+    build_Dropdowns(ddArea, ddCrime, areaNames, crimeCats);
 
-    // For every crimeCat element in the array of crimeCats...
-    // Append the list of options in the dropdown menu with the current crimeCat element where...
-    // The display text & value property of the appended option is the current crimeCat element
-    areaNames.forEach(areaName => {
-        ddArea.append("option").text(areaName).property("value", areaName);
-    });    
-
-    // After appending options into dropdown, initialise multiselect
-    $(document).ready(function() {
-        $('#selArea').multiselect({
-            enableResetButton: true,
-            nonSelectedText:'Area',
-            nSelectedText  : "Area(s)",
-            allSelectedText: "All areas",
-            numberDisplayed: 0.5 // Set to 0.5 instead to 0 to avoid disabling summary text
-        }).multiselect('select', [areaNames[0], areaNames[1]]);
-
-        $('#selCrime').multiselect({
-            enableResetButton: true,
-            nonSelectedText:'Crime',
-            nSelectedText  : "Crime(s)",
-            allSelectedText: "All crimes",
-            numberDisplayed: 0.5 
-        }).multiselect('select', [crimeCats[0], crimeCats[1]]);
-    });
-    
-    // Creating year slider
-    var year_slider = new rSlider({
-        target: '#selYear',
-        values: calYears,
-        range: true,
-        tooltip: false,
-        scale: true,
-        labels: true,
-        set: [calYears[0], calYears[1]],
-        width: '300%'
-    });
-
-    const runQuery = (event) => {
-        // Return the values chosen using JQuery
-        // For the Multiselect dropdown menus, trim() is used for every selected value string item to remove any spacing from either ends prior to URI encoding
-        // encodeURIComponent() is used to replace the spacing in between the string item (e.g. "77th Street") with '%20' to be HTML format friendly (e.g. "77th%20Street")
-        let area_sel = $('#selArea option:selected').map(function(a, item){return encodeURIComponent(item.value.trim());}).get();
-        let crime_sel = $('#selCrime option:selected').map(function(a, item){return encodeURIComponent(item.value.trim());}).get();
-        let year_sel = year_slider.getValue();
-
-        // Concatenate elements from their respective array into string  
-        let area_str = area_sel.join(',');
-        let crime_str = crime_sel.join(',');
-        //let year_str = year_sel.join(',');
-
-
-        
-        //Use backticks (``) in order to output template literals i.e. output something like how f-strings are written in Python
-        let queryAPI = `/api/v1.0/${year_sel}/${area_str}/${crime_str}`;
-        let queryURL = apiURL + queryAPI;
-
-        d3.json(queryURL).then(jsonData => {
-            queryData = jsonData
-
-            init_AllVisuals(queryData);
-
-        });
-        
-
-        console.log(area_str);
-        console.log(crime_str);
-        console.log(year_sel);
-
-        console.log(queryURL);
-    
-    };   
-
-    // Button event listener
-    d3.select("#runQuery").on("click", runQuery);
+    build_Slider(calYears);
 
     // Programmatically trigger the Button click to initialise the visuals during startup
     d3.select("#runQuery").node().click();
 
 });
+
+
+const runQuery = (event) => {
+    // Return the values chosen using JQuery
+    // For the Multiselect dropdown menus, trim() is used for every selected value string item to remove any spacing from either ends prior to URI encoding
+    // encodeURIComponent() is used to replace the spacing in between the string item (e.g. "77th Street") with '%20' to be HTML format friendly (e.g. "77th%20Street")
+    let area_sel = $('#selArea option:selected').map(function(a, item){return encodeURIComponent(item.value.trim());}).get();
+    let crime_sel = $('#selCrime option:selected').map(function(a, item){return encodeURIComponent(item.value.trim());}).get();
+    let year_sel = d3.select("#selYear").node().value;
+
+    // Concatenate elements from their respective array into string  
+    let area_str = area_sel.join(',');
+    let crime_str = crime_sel.join(',');
+
+    
+    //Use backticks (``) in order to output template literals i.e. output something like how f-strings are written in Python
+    let queryAPI = `/api/v1.0/${year_sel}/${area_str}/${crime_str}`;
+    let queryURL = apiURL + queryAPI;
+
+    d3.json(queryURL).then(jsonData => {
+        queryData = jsonData
+
+        init_AllVisuals(queryData);
+
+    });
+    
+
+    console.log(area_str);
+    console.log(crime_str);
+    console.log(year_sel);
+
+    console.log(queryURL);
+
+};   
+
 
 
 // Function to initialise or reinitialise all visuals including the Leaflet Map and Chart JS plots
@@ -133,7 +90,6 @@ const init_AllVisuals = (thisDataset) => {
     // Initialise or Reinitialise the Pie Chart (Using Chart.js)
     init_PieChart(thisDataset);
 };
-
 
 const init_Map = (thisDataset) => {
         // Declaring resultData as the contents of pulled data's 'crime_data'
@@ -233,59 +189,83 @@ const init_Map = (thisDataset) => {
             marks.addLayer(L.marker(coords).bindPopup(popup(category, code, descp, area, street, x_str, premise, occ_date, occ_time, rep, age, sex, descent)));
     
         }
+
+    // Creating heatmap
+    // Creating parameters for heatmap to be created
+    let cfg = {
+        "radius": 40,
+        "useLocalExtrema": true,
+        valueField: 'count'
+    }
+    // Declaring new heatmap layer
+    let heatmap = new HeatmapOverlay(cfg);
+    // Feeding in heatmap points list into the cfg
+    heatmap.setData({
+        data: hm_pts
+    });
     
-        // Setting tile layers
-        // Street view
-        let street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
-                                    {
-                                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                    }
-                                );
-        // Satelite view
-        let satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 
-                                    {
-                                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                                    }
-                                );
-        // Declaring base tile layers for layer control
-        let baseMaps = {
-            "Street View": street,
-            "Satelite View": satelite
-        }
+    // Declaring overlays for layer control
+    let overlayMaps = {
+        Markers: marks,
+        Heatmap: heatmap
+    }
+
+    // Destroy div and reinitialise to create the Leaflet Map
+    d3.select("#crime-map").html("");
+    d3.select("#map-container").html("<div id='crime-map'></div>");
+
+    // Street view
+    let street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }
+    );
+
+    // Satelite view
+    let satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }
+    );
+
+    // Declaring base maps for layer control
+    let baseMaps = {
+        "Street View": street,
+        "Satelite View": satelite
+    }
+
+
+    // Creating map
+    let crime_map = L.map("crime-map", 
+                            {
+                            center: [33.956174824512914,  -118.2116044755473],
+                            zoom: 11,
+                            minZoom: 9,
+                            maxZoom: 18,
+                            layers: [street, marks]
+                            }
+                        );
+
+
+    // Creating layer control
+    L.control.layers(baseMaps, overlayMaps).addTo(crime_map);
+
+}
+
+
+const build_Map = (baseMaps) => {
+    // Creating map
+    let crime_map = L.map("crime-map", 
+                            {
+                            center: [33.956174824512914,  -118.2116044755473],
+                            zoom: 11,
+                            minZoom: 9,
+                            maxZoom: 18,
+                            layers: [street]
+                            }
+                        );
+
+    // Creating layer control
+    L.control.layers(baseMaps).addTo(crime_map);
     
-        // Creating heatmap
-        // Creating parameters for heatmap to be created
-        let cfg = {
-            "radius": 40,
-            "useLocalExtrema": true,
-            valueField: 'count'
-        }
-        // Declaring new heatmap layer
-        let heatmap = new HeatmapOverlay(cfg);
-        // Feeding in heatmap points list into the cfg
-        heatmap.setData({
-            data: hm_pts
-        });
-        
-        // Declaring overlays for layer control
-        let overlayMaps = {
-            Markers: marks,
-            Heatmap: heatmap
-        }
-    
-        // Creating map
-        let crime_map = L.map("crime-map", 
-                                {
-                                center: [33.956174824512914,  -118.2116044755473],
-                                zoom: 11,
-                                minZoom: 9,
-                                maxZoom: 18,
-                                layers: [street, marks]
-                                }
-                            );
-        
-        // Creating layer control
-        L.control.layers(baseMaps, overlayMaps).addTo(crime_map);
 };
 
 
@@ -327,3 +307,55 @@ const init_PieChart = (thisDataset) => {
     chartBar = d3.select('#jsChart_Pie')
 
 };
+
+
+const build_Dropdowns = (dropdownAreas, dropdownCrimes, arrayAreas, arrayCrimes) => {
+    // For every crimeCat element in the array of crimeCats...
+    // Append the list of options in the dropdown menu with the current crimeCat element where...
+    // The display text & value property of the appended option is the current crimeCat element
+    arrayAreas.forEach(Area => {
+        dropdownAreas.append("option").text(Area).property("value", Area);
+    });   
+
+   
+    // For every crimeCat element in the array of crimeCats...
+    // Append the list of options in the dropdown menu with the current crimeCat element where...
+    // The display text & value property of the appended option is the current crimeCat element
+    arrayCrimes.forEach(Crime => {
+        dropdownCrimes.append("option").text(Crime).property("value", Crime);
+    });
+
+    
+    // After appending options into dropdown, initialise multiselect
+    $(document).ready(function() {
+        $('#selArea').multiselect({
+            enableResetButton: true,
+            nonSelectedText:'Area',
+            nSelectedText  : "Area(s)",
+            allSelectedText: "All areas",
+            numberDisplayed: 0.5 // Set to 0.5 instead to 0 to avoid disabling summary text
+        }).multiselect('select', [arrayAreas[0], arrayAreas[1]]);
+
+        $('#selCrime').multiselect({
+            enableResetButton: true,
+            nonSelectedText:'Crime',
+            nSelectedText  : "Crime(s)",
+            allSelectedText: "All crimes",
+            numberDisplayed: 0.5 
+        }).multiselect('select', [arrayCrimes[0], arrayCrimes[1]]);
+    });
+}
+
+const build_Slider = (arrayYears) => {
+    // Creating year slider
+    var year_slider = new rSlider({
+        target: '#selYear',
+        values: arrayYears,
+        range: true,
+        tooltip: false,
+        scale: true,
+        labels: true,
+        set: [arrayYears[0], arrayYears[1]],
+        width: '300%'
+    });
+}
