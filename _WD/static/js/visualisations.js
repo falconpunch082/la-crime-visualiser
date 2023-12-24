@@ -251,24 +251,6 @@ const init_Map = (thisDataset) => {
 }
 
 
-const build_Map = (baseMaps) => {
-    // Creating map
-    let crime_map = L.map("crime-map", 
-                            {
-                            center: [33.956174824512914,  -118.2116044755473],
-                            zoom: 11,
-                            minZoom: 9,
-                            maxZoom: 18,
-                            layers: [street]
-                            }
-                        );
-
-    // Creating layer control
-    L.control.layers(baseMaps).addTo(crime_map);
-    
-};
-
-
 // Using the Chart JS library, this callback function initialises a Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
 const init_TimeSeries = (thisDataset) => {
 
