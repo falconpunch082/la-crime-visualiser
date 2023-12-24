@@ -136,13 +136,31 @@ def filtered_data(years_str, area_names_str, crime_categories_str):
     
     session = Session(engine)
   
-    # Run the final SQLAlchemy query of all data (filtered)
+    # Run the SQLAlchemy query of all data (filtered)
     query_all_filtered = session.query(crime).\
         filter(
             and_(*filters_selected)
         ).all()
 
+    # Run the SQLAlchemy query of all unique victim sex (filtered)
+    #query_sex_filtered = session.query(crime.vict_sex).\
+    #    filter(
+    #        and_(*filters_selected)
+    #    ).distinct().all()
+
+    # Run the SQLAlchemy query of all unique victim descents (filtered)
+    #query_descent_filtered = session.query(crime.vict_descent).\
+    #    filter(
+    #        and_(*filters_selected)
+    #    ).distinct().all()
+    
+
     session.close()
+
+
+    #sexes_list = [row.vict_sex for row in query_sex_filtered]
+
+    #descents_list = [row.vict_descent for row in query_descent_filtered]
 
 
     data_dict = []
@@ -171,16 +189,12 @@ def filtered_data(years_str, area_names_str, crime_categories_str):
         data_dict.append(row_dict)
 
 
-    #results = {
-    #    "years": years_list,
-    #    "crimes": crimes_list,
-    #    "areas": areas_list
-    #}  
-
     results = {
         "years": years_list,
         "area_names": areas_list,
         "crime_categories": crimes_list,
+        #"vict_sexes": sexes_list,
+        #"vict_descents": descents_list,
         "crime_data": data_dict
     }       
 

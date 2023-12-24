@@ -3,8 +3,37 @@
 *[Working Copy from Wassim Deen]*
 ---
 
+**TODO**
+
+1. Include key metrics within the 'card' HTML elements e.g. total crimes
+2. Remove debugging code
+3. Add additional comments to the code
+4. Finalise group project README
+
 
 **Changelog:**
+
+- [24/12/2023] v1.0 End-to-end workflow process of Interactive Dashboard (`la-crime-visualiser\_WD`)
+  
+    - Updated `data_cleanup_WD.ipynb`
+        - Replaced values with actual category name for Victim Sex and Descent columns
+        - Re-extracted the full LA Crime Dataset (`full_crime_data.csv`)
+            - Stored in ZIP folder to push to repo (`full_crime_data.zip`)
+        - Other tweaks...
+        
+    - Updated `crimeSQL_Local.sql`
+        - `vict_sex` & `vict_descent` are now VARCHAR type
+    
+    - Updated `index.html`
+        - Each Carousel containers contains its own canvas HTML element (to house the chart visualisations)
+        - Other tweaks...
+
+    - Updated `visualisations.js`
+        - [NEW] Chart JS functions to intialise and re-initialise Doughnut/Stacked Bar/Pie Charts (`init_DonutChart`, `init_StackedBarChart`, `init_PieChart`)
+        - [UPDATED] Leaflet Map now reinitialises when running a new query
+        - [UPDATED] Other cleanup...
+
+
 
 - [23/12/2023] v0.2 End-to-end workflow process of Interactive Dashboard (`la-crime-visualiser\_WD`)
     - Deleted `map.js` file (`la-crime-visualiser\_WD\static\js`)
@@ -64,9 +93,7 @@
         - [On Startup] Albeit flawed, successfully populated both dropdown menus with their own unique list of options
 
 
-**TODO**
 
-1. [Overall Work] Utilise Chart.js library to generate pre-agreed visualisations and display on front-end interactive dashboard
 
 
 **NOTES**

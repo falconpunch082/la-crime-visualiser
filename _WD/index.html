@@ -80,6 +80,7 @@
     <script type="text/javascript">
       $(window).on('load', function() {
           $('#welcome-popup').modal('show');
+          //$('#loading-popup').modal('hide');
       });
     </script>
 
@@ -105,6 +106,24 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading popup -->
+    <div id="loading-popup" class="modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Please wait...</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Depending on how much data is being called, your visualisations may take a while to load.<br>
+              Feel free to refresh the page if it's taking too long!
+            </p>
           </div>
         </div>
       </div>
@@ -171,14 +190,14 @@
                 </div>
                 <!-- Chart JS Plots are added to the carousel-->
                 <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <div id="jsChart_TimeSeries"></div>
+                  <div id="chartContainer1" class="carousel-item active">
+                    <canvas id="jsChart_Donut" width="100%" height="100%"></canvas>
                   </div>
-                  <div class="carousel-item">
-                    <div id="jsChart_Bar"></div>
+                  <div id="chartContainer2" class="carousel-item">
+                    <canvas id="jsChart_StackedBar" width="100%" height="100%"></canvas>
                   </div>
-                  <div class="carousel-item">
-                    <div id="jsChart_Pie"></div>
+                  <div id="chartContainer3" class="carousel-item">
+                    <canvas id="jsChart_Pie" width="100%" height="100%"></canvas>
                   </div>
                 </div>
                 <!-- Left and right buttons to control carousel-->
@@ -209,9 +228,9 @@
     <!-- Heatmap JS code-->
     <script src="./static/js/heatmap.js"></script>
     <script src="./static/js/leaflet-heatmap.js"></script>
-    <!-- D3.js for API call -->
+    <!-- Chart JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- D3.js for API call -->
+    <!-- D3 JS -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- Input JS Visualisations-->
     <script src="./static/js/visualisations.js"></script>
