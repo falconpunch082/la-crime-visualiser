@@ -15,7 +15,7 @@ To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data
 
 **Contributors**
 
-- Michael Zabala (michaelz-id): Data extraction, cleaning and manipulation + database hosting.
+- Michael Zabala (michaelz-id): Data extraction, cleaning and manipulation + data types.
 
 - Talieh Sheikholeslami (Talieh-Sh): Creation of Python Flask API providing data from created database for visualisations.
 
