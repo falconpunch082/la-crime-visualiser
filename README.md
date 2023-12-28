@@ -7,9 +7,13 @@ This repository contains all code made by Group 5 that is necessary to run the f
 > This project is one of the four projects part of the bootcamp which requires completion to receive a certificate of completion.
 
 ---
-**Project objective**
+**Project objectives**
 
-To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8/about_data) on Crime Data into a website containing a Leaflet map with markers (containing info popups) and a slider (over time) and a dashboard containing summary charts, complete with a filter on area and crime code.
+- To extract data provided by [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8/about_data) and modifying it to best suit the project's purposes.
+
+- To host modified data online as a Flask API that takes data from a database hosted on the Internet.
+
+- To create an interactive dashboard displaying data from the API, complete with a map displaying where crimes occur, summary statistics displayed on graphs and a filter where enduser can select crimes based on crime type, area and year range.
 
 ---
 
@@ -31,6 +35,8 @@ To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data
 
 - PostgresSQL + [neon.tech](https://neon.tech/).
 
+- [Render](https://render.com/) for API hosting.
+
 - HTML + CSS (with assistance from [teleport.io](https://teleporthq.io/)).
 
 - Javascript libraries like Leaflet, [charts.js](https://www.chartjs.org/), [rSlider](https://github.com/slawomir-zaziablo/range-slider/tree/master) and [heatmap.js](https://www.patrick-wied.at/static/heatmapjs/plugin-leaflet-layer.html).
@@ -41,10 +47,12 @@ To display data from [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data
 
 ---
 
+***Flow chart for data visualisation process**
+
+![Flow chart for data visualisation process](https://imgur.com/a/3eicPxV)
+
+---
+
 **Launch**
 
-There is no need for installation to view this project.
-
-To launch the project, simply click [here](https://falconpunch082.github.io/la-crime-visualiser/).
-
-To take a look at the database, simply click here.
+There is no need for installation to view this project. The visualisation is hosted on a GitHub Pages website that is linked in this repository. As for the API, the link is provided within the visualisation website during startup.
