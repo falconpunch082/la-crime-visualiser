@@ -137,9 +137,9 @@
 			span.style.width = i === iLen - 1 ? 0 : this.step + 'px';
 
 			if (!this.conf.labels) {
-				if (i === 0 || i === iLen - 1) ins.innerHTML = this.conf.values[i]
+				if (i === 0 || i === iLen - 1) ins.innerHTML = "<span style='color: white;'>" + this.conf.values[i] + "</span>"
 			}
-			else ins.innerHTML = this.conf.values[i];
+			else ins.innerHTML = "<span style='color: white;'>" + this.conf.values[i] + "</span>";
 
 			ins.style.marginLeft = (ins.clientWidth / 2) * - 1 + 'px';
 		}

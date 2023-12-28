@@ -3,246 +3,301 @@
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, and_, desc
+
 from flask import Flask, jsonify, render_template
-import os
-from datetime import datetime
 
+from urllib.parse import unquote # Reference: https://docs.python.org/3/library/urllib.parse.html
 
-#By printing os.environ.items(), you are inspecting and displaying all the environment variables 
-#that are currently set on your system at that moment. 
-#This can be helpful for debugging or understanding the environment in which your Flask application is running
-# print(os.environ.items())
+# Use Flask CORS Library to allow access to fetch from Python Flask API routes that would have otherwise been blocked by the CORS policy by default
+# Reference: https://stackoverflow.com/questions/26980713/solve-cross-origin-resource-sharing-with-flask
+from flask_cors import CORS
 
+#################################################
+# SQLAlchemy Database Setup
+#################################################
 
-########################  SQLAlchemy database setup   #############################
+username = "postgres"
+password = "1234567"
+host = "localhost"
+port = "5432"
+db_name = "crime_db"
 
-#Create connecton to the cloud PostgreSQL database in Neon
-engine = create_engine("postgresql://talieh.sh.mail:WHnC3zMy8wsT@ep-curly-waterfall-09913600.us-east-2.aws.neon.tech/LA_Crime_Data_Updated?sslmode=require")
+url = f"postgresql://{username}:{password}@{host}:{port}/{db_name}"
+
+#Create connecton to my local PostgreSQL database
+engine = create_engine(url)
 
 # Create a base for automatically mapping database tables to Python classes
 Base = automap_base()
 
 # Reflect the tables in database
-Base.prepare(autoload_with=engine, schema="public")
+Base.prepare(autoload_with = engine)
+
+# Access the "crime" table
+crime = Base.classes.crime
+
+
+#################################################
+# Flask API App Setup
+#################################################
  
-print(Base.classes.keys())
 # Create a Flask web application instance
 app = Flask(__name__)
 
+# [IMPORTANT] Enable CORS for all API routes; in order for JS scripts to connect to Flask API routes if Flask instance is running locally
+CORS(app)
 
-########################  API Routes   #############################
-# List all the available routes in homepage route.
+# From the Flask library, configure to not sort the keys when serializing JSON responses
+app.json.sort_keys = False
+
+
+
+#################################################
+# Flask API Routes
+#################################################
+
+############# Route #1 (Homepage) ###############
 @app.route("/")
-def beginning():
-    # return (
-    #     "<h1>Available routes:</h1>"
-    #     "/api/v1.0/crimes<br/>"
-    #     "/api/v1.0/summary<br/>"
-    #     "/api/v1.0/summary_yearly_monthly_area_crime_description"
-    #     "/api/v1.0/filter_options<br/>"
-    # )
-    return render_template("homepage.html")
-# Flask route to retrieve crimes data
-@app.route("/api/v1.0/sample_data")
-def crimes():
-
-    # Access the "crime_data_2" table
-    crime_data_updated = Base.classes.crime_data_updated
-    # Create our session (link) from Python to the DB to interact with the database
-    session = Session(engine)
-    # Query the database to retrieve crime data (limiting to 100 records)
-    results_crime = session.query(crime_data_updated).limit(100).all()
-    # Close the database session
-    session.close()
-
-    # Prepare a list to store crime data in JSON format  
-    crimes_list = []
-    # Convert query results into a list of dictionaries
-    for data in results_crime:
-         # Convert the integer time to a formatted time string (HH:MM:SS)
-        time_occured = "{:02}:{:02}:00".format(
-            data.time_occured // 100, data.time_occured % 100)
-
-        # Create a dictionary for each record
-        crime_data = {
-            "DivisionNumber": data.division_number,
-            "DateReported": data.date_reported,
-            "DateOccured": data.date_occured,
-            "TimeOccured":time_occured,
-            "AreaName": data.area_name,
-            "CrimeCategory":data.crime_category,
-            "CrimeDescription":data.crime_description,
-            "VictimAge": data.victim_age,
-            "VictimSex": data.victim_sex,
-            "VictimDescent": data.victim_descent_name,
-            "PremiseDescription": data.premis_desc,
-            "Location": data.location,
-            "CrossStreet": data.cross_street,
-            "Lat": data.lat,
-            "Lon": data.lon
-
-        }
-        # Append the dictionary to the list
-        crimes_list.append(crime_data)
-  
-  
-    # Use jsonify to convert the list of dictionaries to JSON and return it
-    return jsonify(crimes_list)
-   
-# Additional routes can be added here
-########
-@app.route("/api/v1.0/summary")
-def yearly_summary():
-    crime_data_updated = Base.classes.crime_data_updated
-    session = Session(engine)
-
-    # Example query to get count of crimes per year
-    results_yearly = session.query(
-        func.extract('year', crime_data_updated.date_occured).label('year'),
-        func.count().label('crime_count')
-    ).group_by('year').order_by('year').all()
-
-    session.close()
-
-    yearly_data = [{'year': year, 'crime_count': count} for year, count in results_yearly]
-    print(yearly_data)
-    return jsonify(yearly_data)
+def homepage():
+    # [For Testing] List of All Flask API Routes
+    return (
+        f"[Testing Page] List of all Python Flask API Routes (Los Angeles Crime Dataset) <br/>"
+        f"Available Routes:<br/>"
+        f"/api/v1.0/frontend<br/>"
+        f"/api/v1.0/filter_options<br/>"
+        f"/api/v1.0/<years_str>/<area_names_str>/<crime_categories_str><br/>"
+    )
 
 
-########
-@app.route("/api/v1.0/summary_yearly_monthly_area_crime_description")
-def summary_yearly_monthly_area_crime_description():
-    crime_data_updated = Base.classes.crime_data_updated
-    session = Session(engine)
+############# Route #2 (Interactive Dashboard) ###############
+@app.route("/api/v1.0/frontend")
+def frontend():
+    return render_template("index.html")
 
-    # Query to group by year, month, area_name, and crime_description
-    results = session.query(
-        func.extract('year', crime_data_updated.date_occured).label('year'),
-        func.extract('month', crime_data_updated.date_occured).label('month'),
-        crime_data_updated.area_name.label('area_name'),
-        crime_data_updated.crime_category.label('crime_category'),
-        func.count().label('crime_count')
-    ).group_by(
-        'year', 'month', 'area_name', 'crime_category'
-    ).order_by(
-        'year', 'month', 'area_name', 'crime_category'
-    ).all()
 
-    session.close()
-
-    # Preparing the data for JSON response
-    summary_data = []
-    for year, month, area_name, crime_category, count in results:
-        summary_data.append({
-            'year': year,
-            'month': month,
-            'area_name': area_name,
-            'crime_category': crime_category,
-            'crime_count': count
-        })
-
-    return jsonify(summary_data)
-
-########
-
+############# Route #3 (Filter Options) ###############
 @app.route("/api/v1.0/filter_options")
 def filter_options():
-    crime_data_updated = Base.classes.crime_data_updated
+    # Establish session (link) from Python to the SQLite DB
     session = Session(engine)
 
-    # Query to get unique years, crime descriptions, and area names
-    unique_years = session.query(func.extract('year', crime_data_updated.date_occured).label('year')).distinct().order_by('year').all()
-    unique_categories = session.query(crime_data_updated.crime_category.distinct().label('crime_category')).order_by('crime_category').all()
-    unique_areas = session.query(crime_data_updated.area_name.distinct().label('area_name')).order_by('area_name').all()
-    unique_sex = session.query(crime_data_updated.victim_sex.distinct().label('victim_sex')).order_by('victim_sex').all()
-    unique_victim_descent_name = session.query(crime_data_updated.victim_descent_name.distinct().label('victim_descent_name')).order_by('victim_descent_name').all()
-    unique_victim_age = session.query(crime_data_updated.victim_age.distinct().label('victim_age')).order_by('victim_age').all()
+    # Using 'func', query and extract the unique years from the date of crime occurred (date_occ) column
+    query_years = session.query(func.extract('year', crime.date_occ).\
+                                label('year')).distinct().all()
+    
+    years = [row.year for row in query_years]
+
+
+    # Query the unique crime categories from the appropriate column
+    query_crime_categories = session.query(crime.crime_category).distinct().all()
+
+    crime_categories = [row.crime_category for row in query_crime_categories]
+
+
+    # Query the unique area names from the appropriate column
+    query_area_names = session.query(crime.area_name).distinct().all()
+
+    area_names = [row.area_name for row in query_area_names]
+
+
+    # Stores the information in a dictionary (years, crime_categories, area_names)
+    results = {
+        "years": years,
+        "area_names": area_names,
+        "crime_categories": crime_categories
+    }    
+
+    # Return the JSON 'results' dictionary that includes all options to populate for the HTML interactive filter tools 
+    return jsonify(results)
+
+
+############# Route #4 ([Dynamic API Route] Query Data based on Filters Applied) ###############
+@app.route("/api/v1.0/<years_str>/<area_names_str>/<crime_categories_str>")
+def filtered_data(years_str, area_names_str, crime_categories_str):
+    
+    years_list = [int(year) for year in years_str.split(',')]
+    areas_list = area_names_str.split(',')
+    crimes_list = crime_categories_str.split(',')
+
+    # Using urllib.parse, perform URL decoding for all string elements in the lists
+    # i.e. replace '%20' with spacing in the string element
+    areas_list = [unquote(area) for area in areas_list]
+    crimes_list = [unquote(crime) for crime in crimes_list]
+
+    # When querying the SQL table, the data is filtered by...
+        # The years selected and...
+        # The area names selected and...
+        # The crime categories selected
+    filters_selected = [func.extract('year', crime.date_occ).between(years_list[0], years_list[1]),
+                        crime.area_name.in_(areas_list),
+                        crime.crime_category.in_(crimes_list)]
+    
+    
+    session = Session(engine)
+  
+    # Run the SQLAlchemy query of all data (filtered)
+    query_all_filtered = session.query(crime).\
+        filter(
+            and_(*filters_selected)
+        ).all()
+
+    # Run the SQLAlchemy query of all unique victim sex (filtered)
+    #query_sex_filtered = session.query(crime.vict_sex).\
+    #    filter(
+    #        and_(*filters_selected)
+    #    ).distinct().all()
+
+    # Run the SQLAlchemy query of all unique victim descents (filtered)
+    #query_descent_filtered = session.query(crime.vict_descent).\
+    #    filter(
+    #        and_(*filters_selected)
+    #    ).distinct().all()
+    
 
     session.close()
 
-    # Format the results into JSON
-    filter_options_data = {
-        'Years': [year[0] for year in unique_years],
-        'Categories': [category[0] for category in unique_categories],
-        'Areas': [area[0] for area in unique_areas],
-        'Victim sex': [sex[0] for sex in unique_sex],
-        'Victim descent': [descent[0] for descent in unique_victim_descent_name],
-        'Victim age': [age[0] for age in unique_victim_age]
-    }
 
-    return jsonify(filter_options_data)
-###########
-@app.route("/api/v1.0/<int:startyear>/<int:endyear>/<string:crime_category>/<string:areas>")
-def filtered_data(startyear, endyear, crime_category, areas):
-    crime_data_updated = Base.classes.crime_data_updated
-    session = Session(engine)
+    #sexes_list = [row.vict_sex for row in query_sex_filtered]
 
-    # Define query filters based on provided parameters
-    filters = []
-    if startyear:
-        filters.append(func.extract('year', crime_data_updated.date_occured) >= startyear)
-    if endyear:
-        filters.append(func.extract('year', crime_data_updated.date_occured) <= endyear)
-    if crime_category:
-        crime_list = crime_category.split(',')
-        filters.append(crime_data_updated.crime_category.in_(crime_list))
-    if areas:
-        area_list = areas.split(',')
-        filters.append(crime_data_updated.area_name.in_(area_list))
+    #descents_list = [row.vict_descent for row in query_descent_filtered]
 
-    # Query the database with the applied filters and select the desired fields
-    filtered_results = session.query(
-        crime_data_updated.crime_category.label('crime_category'),
-        crime_data_updated.crime_description.label('crime_description'),
-        crime_data_updated.area_name.label('area'),
-        crime_data_updated.premis_desc.label('premis_desc'),
-        crime_data_updated.location.label('location'),
-        crime_data_updated.lat.label('lat'),
-        crime_data_updated.lon.label('lon'),
-        crime_data_updated.victim_sex.label('victim_sex'),
-        crime_data_updated.victim_age.label('victim_age'),
-        crime_data_updated.date_reported.label('date_reported'),
-        crime_data_updated.date_occured.label('date_occured'),
-        crime_data_updated.time_occured.label('time_occured'),
-        crime_data_updated.victim_descent_name.label('victim_descent_name'),
-        func.extract('year', crime_data_updated.date_occured).label('year')
-    ).filter(*filters).all()
 
-    session.close()
+    data_dict = []
 
-    # Prepare the filtered data for JSON response
-    filtered_data = []
-    for data in filtered_results:
-        # Format time_occured correctly
-        time_occured_formatted = "{:02}:{:02}:00".format(data.time_occured // 100, data.time_occured % 100)
-
-        # Create a dictionary for each record
-        filtered_record = {
-            "Crime category": data.crime_category,
-            "Crime description": data.crime_description,
-            "Area": data.area,
-            "Premis desc": data.premis_desc,
-            "Location": data.location,
-            "Lat": data.lat,
-            "Lon": data.lon,
-            "Victim sex":data.victim_sex,
-            "Victim age":data.victim_age,
-            "Victim Ethnicity":data.victim_descent_name,
-            "Date reported":data.date_reported,
-            "Date occured":data.date_occured,
-            "Time occured":time_occured_formatted,
-            "Year": data.year
+    for row in query_all_filtered:
+        row_dict = {
+            'id': row.id,
+            'dr_no': row.dr_no,
+            'date_rptd': row.date_rptd,
+            'date_occ': row.date_occ,
+            'time_occ': str(row.time_occ),
+            'area_name': row.area_name,
+            'crime_category': row.crime_category,
+            'crm_cd': row.crm_cd,
+            'crm_cd_desc': row.crm_cd_desc,
+            'vict_age': row.vict_age,
+            'vict_sex': row.vict_sex,
+            'vict_descent': row.vict_descent,
+            'premis_desc': row.premis_desc,
+            'location': row.location,
+            'cross_street': row.cross_street,
+            'lat': row.lat,
+            'lon': row.lon
         }
-        filtered_data.append(filtered_record)
+        
+        data_dict.append(row_dict)
 
-    return jsonify(filtered_data)
 
-##############
+    results = {
+        "years": years_list,
+        "area_names": areas_list,
+        "crime_categories": crimes_list,
+        #"vict_sexes": sexes_list,
+        #"vict_descents": descents_list,
+        "crime_data": data_dict
+    }       
+
+    return jsonify(results)
+
+
+
+
+############# Route #5 (Sample Data) ###############
+@app.route("/api/v1.0/sample_data")
+def all_data():
+
+    session = Session(engine)
+
+    # Using 'func', query and extract the unique years from the date of crime occurred (date_occ) column
+    query_all = session.query(crime).limit(1000)
+        
+    session.close()
+
+
+    data_dict = []
+
+    for row in query_all:
+        temp_dict = {
+            'id': row.id,
+            'dr_no': row.dr_no,
+            'date_rptd': row.date_rptd,
+            'date_occ': row.date_occ,
+            'time_occ': str(row.time_occ),
+            'area_name': row.area_name,
+            'crime_category': row.crime_category,
+            'crm_cd': row.crm_cd,
+            'crm_cd_desc': row.crm_cd_desc,
+            'vict_age': row.vict_age,
+            'vict_sex': row.vict_sex,
+            'vict_descent': row.vict_descent,
+            'premis_desc': row.premis_desc,
+            'location': row.location,
+            'cross_street': row.cross_street,
+            'lat': row.lat,
+            'lon': row.lon
+        }
+        
+        data_dict.append(temp_dict)
+
+    
+    results = {
+        "crime_data": data_dict,
+    }       
+
+    return jsonify(results)
+
+
+############# Route #6 (Test) ###############
+@app.route("/api/v1.0/test")
+def test():
+
+    session = Session(engine)
+
+    query_all = session.query(crime).\
+        filter(
+            and_(
+                func.extract('year', crime.date_occ).in_([2020, 2021]),
+                crime.area_name.in_(["77th Street"]),
+                crime.crime_category.in_(["Other Theft"])
+            )
+        ).limit(100)
+
+    session.close()
+
+
+    data_dict = []
+
+    for row in query_all:
+        temp_dict = {
+            'id': row.id,
+            'dr_no': row.dr_no,
+            'date_rptd': row.date_rptd,
+            'date_occ': row.date_occ,
+            'time_occ': str(row.time_occ),
+            'area_name': row.area_name,
+            'crime_category': row.crime_category,
+            'crm_cd': row.crm_cd,
+            'crm_cd_desc': row.crm_cd_desc,
+            'vict_age': row.vict_age,
+            'vict_sex': row.vict_sex,
+            'vict_descent': row.vict_descent,
+            'premis_desc': row.premis_desc,
+            'location': row.location,
+            'cross_street': row.cross_street,
+            'lat': row.lat,
+            'lon': row.lon
+        }
+        data_dict.append(temp_dict)
+
+    
+    results = {
+        "crime_data": data_dict,
+    }       
+
+    return jsonify(results)
 
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True, port=9000)
-
-
+    app.run(debug = True)
