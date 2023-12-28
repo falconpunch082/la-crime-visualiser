@@ -49,7 +49,7 @@ This repository contains all code made by Group 5 that is necessary to run the f
 
 ***Flow chart for data visualisation process**
 
-![Flow chart for data visualisation process](https://imgur.com/a/3eicPxV)
+![Flow chart for data visualisation process](https://github.com/falconpunch082/la-crime-visualiser/assets/26648391/a7b5e73f-9049-46b2-aa30-8eb205913943)
 
 ---
 
