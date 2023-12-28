@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadata -->
+    <title>Los Angeles Crime Visualiser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+
+    <!-- Code to reset default browser styles-->
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
+    </style>
+
+    <!-- Code to set default styles for HTML and body elements-->
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Inter;
+        font-size: 16px;
+      }
+
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.15;
+        color: var(--dl-color-gray-black);
+        background-color: var(--dl-color-gray-white);
+
+      }
+    </style>
+
+    <!-- Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
+      data-tag="font"
+    />
+
+    <!-- Bootstrap CSS and JS for carousel-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <!-- Twitter Bootstrap and jQuery for Multiselect -->
+    <link rel="stylesheet" href="./static/css/bootstrap-4.5.2.min.css" type="text/css"/>
+    <script type="text/javascript" src="./static/js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="./static/js/bootstrap.bundle-4.5.2.min.js"></script>
+
+    <!-- Multiselect Plugin's CSS and JS: -->
+    <script type="text/javascript" src="./static/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="./static/css/bootstrap-multiselect.css" type="text/css"/>
+
+    <!-- rSlider Library's CSS and JS -->
+    <link rel="stylesheet" href="./static/css/rSlider.css">
+    <script src="./static/js/rSlider.js"></script> 
+
+    <!-- Leaflet CSS-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Marker Cluster CSS-->
+    <link href="./static/css/MarkerCluster.css" rel="stylesheet" type="text/css"/>
+    <link href="./static/css/MarkerCluster.Default.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Website CSS -->
+    <link href="./static/css/index.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="./static/css/style.css" />
+
+    <script type="text/javascript">
+      $(window).on('load', function() {
+          $('#welcome-popup').modal('show');
+          //$('#loading-popup').modal('hide');
+      });
+    </script>
+
+  </head>
+  <body>
+
+    <!-- Welcome popup will load upon page startup-->
+    <div id="welcome-popup" class="modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Welcome to the Los Angeles Crime Visualiser!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              This website shows where crimes have occurred in Los Angeles from 2020 to present day, as well
+              as some data visualisations! <br>
+              Feel free to change the filters based on area, crime and time range! <br>
+              To look at how this works, head to <a href="https://github.com/falconpunch082/la-crime-visualiser">the GitHub Repo</a>! <br>
+              To access the API we made for these visualisations, head over <a href="'http://127.0.0.1:5000/">here</a>!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-container">
+      <!--This div contains everything visible -->
+      <div id="visualisation" class="home-container01">
+        <!-- This div is where the Leaflet map lives -->
+        <div id="map-container" class="home-container02">
+          <div id="crime-map"></div>
+        </div>
+        <!-- 
+          This div is where the summary charts will be placed.
+          This div is divided into search div and chart div.
+        -->
+        <div id="summary-container" class="home-container03">
+          <!-- This div is where the filter inputs live -->
+          <div id="search" class="home-container04">
+            <!-- This div is where the dropdown menus and the filter text live -->
+            <div id="top-filter" class="home-container05">
+              <!-- Filter text container -->
+              <div id="filter-box" class="home-container06">
+                <h3 id="filter-text" class="home-text">FILTER</h3>
+              </div>
+              <!-- Area dropdown container made with bootstrap-multiselect -->
+              <div id="area-box" class="home-container07">
+                <select id="selArea" class="home-select" multiple="multiple">
+                  <!-- This section is automatically filled with options thanks to visualisations.js-->
+                </select>
+              </div>
+              <!-- Crime dropdown container made with bootstrap-multiselect -->
+              <div id="crime-box" class="home-container08">
+                <select id="selCrime" class="home-select1" multiple="multiple">
+                  <!-- This section is automatically filled with options thanks to visualisations.js-->
+                </select>
+              </div>
+            </div>
+            <!-- This div is where the slider lives -->
+            <div id="bottom-filter" class="home-container09">
+              <!-- rSlider will convert this text input into a slider -->
+              <div id="slider" class="home-container10">
+                <input type="text" id="selYear"/>
+              </div>
+              <!-- Button to start query once user has chosen what to search for -->
+              <div id="button-box" class="home-container11">
+                <button id="runQuery" onclick="runQuery(this.event)" type="button" class="home-button button">
+                  SEARCH
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- This is where the charts live -->
+          <div id="charts" class="home-container12">
+            <!-- Charts container -->
+            <div id="chart-gallery-container" class="home-container13">
+              <!-- Charts are within a carousel -->
+              <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicators for easy access -->
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#chart-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <!-- Chart JS Plots are added to the carousel-->
+                <div class="carousel-inner">
+                  <div id="chartContainer1" class="carousel-item active">
+                    <canvas id="jsChart_Donut" width="100%" height="100%"></canvas>
+                  </div>
+                  <div id="chartContainer2" class="carousel-item">
+                    <canvas id="jsChart_StackedBar" width="100%" height="100%"></canvas>
+                  </div>
+                  <div id="chartContainer3" class="carousel-item">
+                    <canvas id="jsChart_Pie" width="100%" height="100%"></canvas>
+                  </div>
+                </div>
+                <!-- Left and right buttons to control carousel-->
+                <button class="carousel-control-prev" type="button" data-bs-target="#chart-carousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#chart-carousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Leaflet JS-->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Marker cluster JS code -->
+    <script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.0.3/dist/leaflet.markercluster.js"></script>
+    <script src="./static/js/leaflet.featuregroup.subgroup.js"></script>
+    <!-- Heatmap JS code-->
+    <script src="./static/js/heatmap.js"></script>
+    <script src="./static/js/leaflet-heatmap.js"></script>
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- D3 JS -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Input JS Visualisations-->
+    <script src="./static/js/visualisations.js"></script>
+  </body>
+</html>
