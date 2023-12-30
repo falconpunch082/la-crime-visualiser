@@ -80,13 +80,14 @@ app.config['JSON_SORT_KEYS'] = False  # Disable sorting JSON keys
 @app.route("/")
 def homepage():
     # [For Testing] List of All Flask API Routes
-    return (
-        f"[Testing Page] List of all Python Flask API Routes (Los Angeles Crime Dataset) <br/>"
-        f"Available Routes:<br/>"
-        f"/frontend<br/>"
-        f"/api/v1.0/filter_options<br/>"
-        f"/api/v1.0/<years_str>/<area_names_str>/<crime_categories_str><br/>"
-    )
+    return render_template("homepage.html")
+    # return (
+    #     f"[Testing Page] List of all Python Flask API Routes (Los Angeles Crime Dataset) <br/>"
+    #     f"Available Routes:<br/>"
+    #     f"/frontend<br/>"
+    #     f"/api/v1.0/filter_options<br/>"
+    #     f"/api/v1.0/<years_str>/<area_names_str>/<crime_categories_str><br/>"
+    # )
 
 
 ############# Route #2 (Interactive Dashboard) ###############

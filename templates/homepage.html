@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Los Angeles Crime Data</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add custom CSS for styling -->
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            background-color: #e2f2f2fc;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .jumbotron {
+            background-image: ; /* Add your background image */
+            background-size: cover;
+            color: #5a5cb6;
+            padding: 50px;
+        }
+        .navbar {
+            background-color: #ffffff;
+        }
+        h1, h2 {
+            color: #10127b;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 10px 0;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+    <!-- Jumbotron Header -->
+    <div class="jumbotron">
+        <h1 class="display-4" style="color: black;">Welcome to the Los Angeles Crime Data API</h1>
+        <p class="lead">Explore crime incidents in the City of Los Angeles since 2020.</p>
+    </div>
+
+    <!-- Container for Project Description -->
+    <div class="container">
+        <h2>About the Project</h2>
+        <p>This dataset reflects incidents of crime in the City of Los Angeles from 2020 to current. Use this API to access and analyze crime data for research, insights, and more.</p>
+    </div>
+
+    <!-- Container for API Instructions -->
+    <div class="container">
+        <h2>Interactive Dashboard</h2>
+        <p>To interact with the data and visualize crime statistics, you can access the interactive dashboard by clicking the link below.</p>
+        <a href="/frontend">Go to Interactive Dashboard</a>
+
+        <br> <!-- Line break added here -->
+        <br>
+
+        <h2>How to Use the API</h2>
+        <ol>
+            <li>Access the available API routes:</li>
+            <ul>
+                <li><a href="/api/v1.0/filter_options">/api/v1.0/filter_options</a> - Filter Options API</li>
+                <li><a href="/api/v1.0/sample_data">/api/v1.0/sample_data</a> - Sample Data API</li>
+                <li><a href="/api/v1.0/test">/api/v1.0/test</a> - Test Data API</li>
+            </ul>
+            <li>Click on the links to explore each API route.</li>
+            <li>Retrieve and analyze the data for your needs.</li>
+        </ol>
+    </div>
+
+    <!-- New section for the Dynamic API -->
+    <div class="container">
+        <h2>Dynamic API</h2>
+        <p>Query specific data based on your chosen filters using the Dynamic API:</p>
+        <form id="dynamicApiForm">
+            <div class="form-group">
+                <label for="years">Select Years:</label>
+                <input type="text" class="form-control" id="years" placeholder="e.g., 2020,2021,2022,2023">
+            </div>
+            <div class="form-group">
+                <label for="areaNames">Select Area Names:</label>
+                <input type="text" class="form-control" id="areaNames" placeholder="e.g., Central,Harbor,Southeast,West LA,..">
+            </div>
+            <div class="form-group">
+                <label for="crimeCategories">Select Crime Categories:</label>
+                <input type="text" class="form-control" id="crimeCategories" placeholder="e.g., Burglary,Homicide,Rape,..">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="openDynamicApiInNewTab()">Query</button>
+        </form>
+    </div>
+
+    <footer>
+        <!-- Add footer content here if needed -->
+        Version 1.0
+    </footer>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript for querying the Dynamic API -->
+    <script>
+        function openDynamicApiInNewTab() {
+            // Get input values
+            const years = document.getElementById("years").value;
+            const areaNames = document.getElementById("areaNames").value;
+            const crimeCategories = document.getElementById("crimeCategories").value;
+
+            // Construct API URL
+            const apiUrl = `/api/v1.0/${years}/${areaNames}/${crimeCategories}`;
+
+            // Open the API URL in a new tab
+            window.open(apiUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
