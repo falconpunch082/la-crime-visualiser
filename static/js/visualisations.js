@@ -8,7 +8,7 @@
 let queryData;
 
 // Get URL of the Python Flask API as Constant; not going to be altered
-const apiURL = 'http://127.0.0.1:5000';
+const apiURL = 'http://127.0.0.1:8080';
 
 const optionAPI = '/api/v1.0/filter_options'
 const optionURL = apiURL + optionAPI
