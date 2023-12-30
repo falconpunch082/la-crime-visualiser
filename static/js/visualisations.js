@@ -7,11 +7,11 @@
 // Define variable to store the filtered query JSON Dataset
 let queryData;
 
-// Get URL of the Python Flask API as Constant; not going to be altered
-const apiURL = 'http://127.0.0.1:8080';
+// Get the base URL of the current page
+const baseURL = window.location.origin;
 
 const optionAPI = '/api/v1.0/filter_options'
-const optionURL = apiURL + optionAPI
+const optionURL = baseURL + optionAPI
 
 
 // Using D3, fetch the JSON Dataset from the specified URL 
@@ -58,7 +58,7 @@ const runQuery = (event) => {
     
     //Use backticks (``) in order to output template literals i.e. output something like how f-strings are written in Python
     let queryAPI = `/api/v1.0/${year_sel}/${area_str}/${crime_str}`;
-    let queryURL = apiURL + queryAPI;
+    let queryURL = baseURL + queryAPI;
 
     d3.json(queryURL).then(jsonData => {
         queryData = jsonData
