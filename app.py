@@ -83,7 +83,7 @@ def homepage():
     return (
         f"[Testing Page] List of all Python Flask API Routes (Los Angeles Crime Dataset) <br/>"
         f"Available Routes:<br/>"
-        f"/api/v1.0/frontend<br/>"
+        f"/frontend<br/>"
         f"/api/v1.0/filter_options<br/>"
         f"/api/v1.0/<years_str>/<area_names_str>/<crime_categories_str><br/>"
     )
