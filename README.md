@@ -56,3 +56,9 @@ This repository contains all code made by Group 5 that is necessary to run the f
 **Launch**
 
 There is no need for installation to view this project. The visualisation is hosted on a GitHub Pages website that is linked in this repository. As for the API, the link is provided within the visualisation website during startup.
+
+---
+
+**Local Development Setup**  
+You need to create dbpassword.txt in the project working directory and paste your desired database password there.  
+Note: make sure to NOT commit this file to Git.

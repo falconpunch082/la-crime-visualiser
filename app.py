@@ -12,18 +12,33 @@ from urllib.parse import unquote # Reference: https://docs.python.org/3/library/
 # Use Flask CORS Library to allow access to fetch from Python Flask API routes that would have otherwise been blocked by the CORS policy by default
 # Reference: https://stackoverflow.com/questions/26980713/solve-cross-origin-resource-sharing-with-flask
 from flask_cors import CORS
+import os
 
 #################################################
 # SQLAlchemy Database Setup
 #################################################
 
-username = "postgres"
-password = "1234567"
-host = "localhost"
-port = "5432"
-db_name = "crime_db"
+# username = "postgres"
+# password = "1234567"
+# host = "localhost"
+# port = "5432"
+# db_name = "crime_db"
 
-url = f"postgresql://{username}:{password}@{host}:{port}/{db_name}"
+# url = f"postgresql://{username}:{password}@{host}:{port}/{db_name}"
+
+# Check if the "dbpassword.txt" file exists
+if os.path.isfile("dbpassword.txt"):
+    # Read the database password from the external file
+    with open("dbpassword.txt", "r") as password_file:
+        db_password = password_file.read().strip()
+
+else:
+    # Provide guidance when the file is not found
+    print("The 'dbpassword.txt' file was not found. Please create the file and add your database password to it.")
+    exit()
+
+    # Use the password in your URL
+url = f"postgresql://talieh.sh.mail:{db_password}@ep-curly-waterfall-09913600.us-east-2.aws.neon.tech/LA_Crime_Data_Project?sslmode=require"
 
 #Create connecton to my local PostgreSQL database
 engine = create_engine(url)
