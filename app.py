@@ -49,9 +49,13 @@ app = Flask(__name__)
 CORS(app)
 
 # From the Flask library, configure to not sort the keys when serializing JSON responses
-app.json.sort_keys = False
+#app.json.sort_keys = False
 
-
+#####
+# Configure JSONIFY_SETTINGS to control JSON serialization behavior
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False  # Disable pretty-printing JSON responses
+app.config['JSON_SORT_KEYS'] = False  # Disable sorting JSON keys
+#####
 
 #################################################
 # Flask API Routes
