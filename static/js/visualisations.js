@@ -1,3 +1,16 @@
+let loadingCounter = 0;
+const showLoadingIndicator = () => {
+    document.getElementById('loading-indicator').style.display = 'block';
+    loadingCounter = loadingCounter + 1;
+  };
+
+  const hideLoadingIndicator = () => {
+    loadingCounter = loadingCounter - 1;
+    if (loadingCounter == 0){
+        document.getElementById('loading-indicator').style.display = 'none';
+    }
+  };
+
 /*
 /////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////// [Charts / D3 JavaScript] Visualisations for Los Angeles Crime Data //////////////
@@ -16,6 +29,7 @@ const optionURL = baseURL + optionAPI
 
 // Using D3, fetch the JSON Dataset from the specified URL 
 // Once successful, THEN pass through the loaded JSON dataset as an argument to the following callback function where...
+showLoadingIndicator();
 d3.json(optionURL).then(jsonData => {
     // The loaded JSON Dataset is stored in the nominated variable
     const optionData = jsonData;
@@ -38,7 +52,9 @@ d3.json(optionURL).then(jsonData => {
     // Programmatically trigger the Button click to initialise the visuals during startup
     d3.select("#runQuery").node().click();
 
-});
+}).finally(() => {
+      hideLoadingIndicator(); // Hide loading indicator when API call is complete
+ });
 
 
 const runQuery = (event) => {
@@ -60,12 +76,15 @@ const runQuery = (event) => {
     let queryAPI = `/api/v1.0/${year_sel}/${area_str}/${crime_str}`;
     let queryURL = baseURL + queryAPI;
 
+    showLoadingIndicator();
     d3.json(queryURL).then(jsonData => {
         queryData = jsonData
 
         init_AllVisuals(queryData);
 
-    });
+    }).finally(() => {
+        hideLoadingIndicator(); // Hide loading indicator when API call is complete
+   });;
     
 
     console.log(area_str);
