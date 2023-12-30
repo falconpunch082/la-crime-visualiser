@@ -75,7 +75,7 @@ def homepage():
 
 
 ############# Route #2 (Interactive Dashboard) ###############
-@app.route("/api/v1.0/frontend")
+@app.route("/frontend")
 def frontend():
     return render_template("index.html")
 
