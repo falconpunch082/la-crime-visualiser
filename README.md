@@ -25,7 +25,7 @@
 
 ## Contributions
 * **Nicholas Dale (falconpunch082)**
-* - [Frontend] Full web development of Analytics Dashboard (HTML / CSS)
+  - [Frontend] Full web development of Analytics Dashboard (HTML / CSS)
   - [Frontend] Implementation of input solutions (Bootstrap.js / D3.js).
   - [Data Visualisation #1] Leaflet Map with markers and heatmap (Leaflet.js)
   - [Miscellaneous] Quality control
