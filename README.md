@@ -24,28 +24,28 @@
 - To create an interactive dashboard displaying data from the API, complete with a map displaying where crimes occur, summary statistics displayed on graphs and a filter where enduser can select crimes based on crime type, area and year range.
 
 ## Contributions
-  * **Nicholas Dale (falconpunch082)**
+**Nicholas Dale (falconpunch082)**
     - [Frontend] Full web development of Analytics Dashboard (HTML / CSS)
 
     - Implementation of input solutions (Bootstrap.js / D3.js).
 
     - [Data Visualisation #1] Leaflet Map (Leaflet.js)
 
-   * **Talieh Sheikholeslami (Talieh-Sh)**
+**Talieh Sheikholeslami (Talieh-Sh)**
     - [Python Flask / SQLAlchemy] Development of Flask API to stream data from PostgreSQL Database for initialisation of JavaScript data visualisations.
 
     - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' Cloud
 
     - For more information: https://render.com/
 
-   * **Michael Zabala (michaelz-id)**
+**Michael Zabala (michaelz-id)**
     - [Python API Calling] Extraction of raw dataset
 
     - [Python Pandas] Data cleaning + manipulation + export to CSV
 
     - [PostgreSQL] Database schema design + setup
     
-   * **Wassim Deen (wdeen)**
+**Wassim Deen (wdeen)**
     - [Backend] Full integration of Analytical Dashboard webpage with Python Flask API (local / online)
 
     - [Frontend] Final polishing to Analytics Dashboard webpage (HTML / CSS)
@@ -59,8 +59,6 @@
     - [Data Visualisation #4] Doughnut Chart (Chart.js / D3.js)
 
     - [Data Visualisation #5] Pie Chart (Chart.js / D3.js)
-
-
 
 ---
 
