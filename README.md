@@ -1,33 +1,54 @@
-# Los Angeles Crime Visualiser
-*Monash University Data Analytics Bootcamp Project 3* \
-*by Group 5 (Nicholas, Wassim, Michael, Talieh)*
----
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# **Los Angeles: Crime Data Analytics Dashboard**
 
-This repository contains all code made by Group 5 that is necessary to run the following project. 
-> This project is one of the four projects part of the bootcamp which requires completion to receive a certificate of completion.
+<p align="center">
+<img src="./Images/Dashboard_Demo.gif" width="100%">
+</p>
 
----
-**Project objectives**
+## Project Contributors
+  * **Nicholas Dale**
+    - [Github] https://github.com/falconpunch082
+ * **Talieh Sheikholeslami**
+    - [Github] https://github.com/Talieh-Sh
+ * **Michael Zabala**
+    - [Github] https://github.com/michaelz-id
+ * **Wassim Deen**
+    - [Github] https://github.com/wdeen
+  
 
+## Project Overview
 - To extract data provided by [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8/about_data) and modifying it to best suit the project's purposes.
 
 - To host modified data online as a Flask API that takes data from a database hosted on the Internet.
 
 - To create an interactive dashboard displaying data from the API, complete with a map displaying where crimes occur, summary statistics displayed on graphs and a filter where enduser can select crimes based on crime type, area and year range.
 
----
+## Contributions
+  * **Nicholas Dale (falconpunch082)**
+    - [Frontend] Full web development of Analytics Dashboard (HTML / CSS)
+    - Implementation of input solutions (Bootstrap.js / D3.js).
+    - [Data Visualisation #1] Leaflet Map (Leaflet.js)
 
-**Contributors**
+   * **Talieh Sheikholeslami (Talieh-Sh)**
+    - [Python Flask / SQLAlchemy] Development of Flask API to stream data from PostgreSQL Database for initialisation of JavaScript data visualisations.
+    - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' Cloud 
+      - For more information: https://render.com/
 
-- Michael Zabala (michaelz-id): Data extraction, cleaning and manipulation + data types.
+   * **Michael Zabala (michaelz-id)**
+    - [Python API Calling] Extraction of raw dataset
+    - [Python Pandas] Data cleaning + manipulation + export to CSV
+    - [PostgreSQL] Database schema design + setup
+    
+   * **Wassim Deen (wdeen)**
+    - [Backend] Full integration of Analytical Dashboard webpage with Python Flask API (local / online)
+    - [Frontend] Final polishing to Analytics Dashboard webpage (HTML / CSS)
+    - [Miscellaneous] Additional support with PostgreSQL / Python Flask development 
+    - [Data Visualisation #2] Time Series Plot (Chart.js / D3.js)
+    - [Data Visualisation #3] Stacked Bar Chart (Chart.js / D3.js)
+    - [Data Visualisation #4] Doughnut Chart (Chart.js / D3.js)
+    - [Data Visualisation #5] Pie Chart (Chart.js / D3.js)
 
-- Talieh Sheikholeslami (Talieh-Sh): Creation of Python Flask API providing data from created database for visualisations.
 
-- Wassim Deen (wdeen) and Nicholas Dale (falconpunch082): Data visualisation using data from created Flask API (Leaflet map, summary charts).
-
-- Nicholas Dale (falconpunch082): Frontend (responsive HTML + CSS), and implementation of input solutions.
-
-- Wassim Deen (wdeen): Integration of visualisation website with online API and final touches to visualisation website.
 
 ---
 

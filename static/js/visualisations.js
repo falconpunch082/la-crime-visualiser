@@ -1,16 +1,3 @@
-let loadingCounter = 0;
-const showLoadingIndicator = () => {
-    document.getElementById('loading-indicator').style.display = 'block';
-    loadingCounter = loadingCounter + 1;
-  };
-
-  const hideLoadingIndicator = () => {
-    loadingCounter = loadingCounter - 1;
-    if (loadingCounter == 0){
-        document.getElementById('loading-indicator').style.display = 'none';
-    }
-  };
-
 /*
 /////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////// [Charts / D3 JavaScript] Visualisations for Los Angeles Crime Data //////////////
@@ -23,14 +10,40 @@ let queryData;
 // Get the base URL of the current page
 const baseURL = window.location.origin;
 
+
+// Store the API route to get the list of all filter options
 const optionAPI = '/api/v1.0/filter_options'
+
+// Combine the API Route for the filter options with the Base URL; used to query the JSON dataset of all filter options
 const optionURL = baseURL + optionAPI
 
+// Using D3, select the Button HTML element
+const searchButton = d3.select("#runQuery");
 
-// Using D3, fetch the JSON Dataset from the specified URL 
-// Once successful, THEN pass through the loaded JSON dataset as an argument to the following callback function where...
+// Counter used to determine for when the Loading Bar is displayed or hidden
+let loadingCounter = 0;
+
+
+// Function to display the Loading Bar (triggered during Start Up and runQuery)
+const showLoadingIndicator = () => {
+    document.getElementById('loading-indicator').style.display = 'block';
+    loadingCounter = loadingCounter + 1;
+};
+
+// Function to hide the Loading Bar (triggered during Start Up and runQuery)
+const hideLoadingIndicator = () => {
+    loadingCounter = loadingCounter - 1;
+    if (loadingCounter == 0){
+        document.getElementById('loading-indicator').style.display = 'none';
+    }
+};
+
+
+// Trigger the Loading Bar on startup; signal to the user that webpage initialisation is taking place
 showLoadingIndicator();
 d3.json(optionURL).then(jsonData => {
+    // Using D3, fetch the JSON Dataset from the specified URL 
+    // Once successful, THEN pass through the loaded JSON dataset as an argument to the following callback function where...
     // The loaded JSON Dataset is stored in the nominated variable
     const optionData = jsonData;
   
@@ -44,22 +57,24 @@ d3.json(optionURL).then(jsonData => {
     const areaNames = optionData.area_names;
     const calYears = optionData.years;
 
- 
+    // Call function to generate the dropdown menus for Area Names & Crime Categories
     build_Dropdowns(ddArea, ddCrime, areaNames, crimeCats);
 
+    // Call function to generate the sliders (w/ two handles) for Years
     build_Slider(calYears);
 
     // Programmatically trigger the Button click to initialise the visuals during startup
-    d3.select("#runQuery").node().click();
+    searchButton.node().click();
 
 }).finally(() => {
-      hideLoadingIndicator(); // Hide loading indicator when API call is complete
- });
+      hideLoadingIndicator(); // Hide loading indicator when API call & initialisation of all visualisations are complete
+});
 
-
+// Function to dynamically generate the URL for the Flask Dynamic API Route (based on options selected from the interactive filters) & run visualisations
+// Triggered everytime the SEARCH button is clicked
 const runQuery = (event) => {
-    $('#loading-popup').modal('toggle');
-
+    disableButtonClick();
+    
     // Return the values chosen using JQuery
     // For the Multiselect dropdown menus, trim() is used for every selected value string item to remove any spacing from either ends prior to URI encoding
     // encodeURIComponent() is used to replace the spacing in between the string item (e.g. "77th Street") with '%20' to be HTML format friendly (e.g. "77th%20Street")
@@ -73,49 +88,70 @@ const runQuery = (event) => {
 
     
     //Use backticks (``) in order to output template literals i.e. output something like how f-strings are written in Python
+    // Dynamically generate the URL component for the Dynamic API Route based on the selected filter options
+    // Combine it with the base URL
     let queryAPI = `/api/v1.0/${year_sel}/${area_str}/${crime_str}`;
     let queryURL = baseURL + queryAPI;
 
+    // Trigger Loading Bar as the query is being called and running
     showLoadingIndicator();
     d3.json(queryURL).then(jsonData => {
+        // Using D3, call the the final Query URL and then pass the JSON Dataset
+        // Store the JSON Dataset in a variable
         queryData = jsonData
 
+        // Initialise or Reinitialise all visualisations
         init_AllVisuals(queryData);
 
     }).finally(() => {
-        hideLoadingIndicator(); // Hide loading indicator when API call is complete
-   });;
-    
-
-    console.log(area_str);
-    console.log(crime_str);
-    console.log(year_sel);
-
-    console.log(queryURL);
-
-    $('#loading-popup').modal('hide');
+        hideLoadingIndicator(); // Hide loading indicator when API call & initialisation of all visualisations are complete
+        enableButtonClick();
+    });
 };   
 
 
+const enableButtonClick = () => {
+    // Renable the Search Button
+    searchButton.attr('disabled', null);
 
-// Function to initialise or reinitialise all visuals including the Leaflet Map and Chart JS plots
+    // Change color of button back to its original
+    searchButton.style("background-color", '#FFFFFF');
+
+    // Update the button text to reflect it can be used
+    searchButton.text('SEARCH');
+};
+
+const disableButtonClick = () => {
+    // Disable the Search Button
+    searchButton.attr('disabled', true);
+
+    searchButton.style("background-color", '#808080');
+
+    searchButton.text('LOADING...');
+
+};
+
+
+// Callback Function to initialise or reinitialise all visuals including the Leaflet Map and Chart JS plots
 const init_AllVisuals = (thisDataset) => {
     // Initialise or Reinitialise the Leaflet Map
     init_Map(thisDataset);
-    
-    // Initialise or Reinitialise the Donut Chart (Using Chart.js)
-    init_DonutChart(thisDataset);
-
-    // Initialise or Reinitialise the Stacked Bar Chart (Using Chart.js)
-    init_StackedBarChart(thisDataset);
-  
-    // Initialise or Reinitialise the Pie Chart (Using Chart.js)
-    init_PieChart(thisDataset);
-
+ 
     // Initialise or Reinitialise the Time Series Plot (Using Chart.js)
     init_TimeSeries(thisDataset);
+    
+    // Initialise or Reinitialise the Stacked Bar Chart (Using Chart.js)
+    init_StackedBarChart(thisDataset);
+
+    // Initialise or Reinitialise the Pie Chart (Using Chart.js)
+    init_PieChart(thisDataset);    
+
+    // Initialise or Reinitialise the Donut Chart (Using Chart.js)
+    init_DonutChart(thisDataset);
 };
 
+
+// Using Leaflet Library, this callback function initialises the Leaflet Map
 const init_Map = (thisDataset) => {
         // Declaring resultData as the contents of pulled data's 'crime_data'
         resultData = thisDataset.crime_data;
@@ -275,182 +311,277 @@ const init_Map = (thisDataset) => {
 
 };
 
-// Using the Chart JS library, this callback function initialises a Doughnut Chart (utilising the queried data) within the carousel of the HTML webpage 
-const init_DonutChart = (thisDataset) => {
-    
-    nullValue = null;
 
+// Using the Chart JS library, this callback function initialises the Doughnut Chart (utilising the queried data) within the carousel of the HTML webpage 
+const init_DonutChart = (thisDataset) => {
+    // New constant with null; used as condition
+    const nullValue = null;
+
+    // From the array of all vict_descent values from the dataset, return a new array containing only the unique vict_descent values
+        // '...' spread operator used to convert the following Set() object into a new array
+        // 'new Set()' is used to create a new Set instance to store only the unique values from the array of vict_descent values
+        // using map() on crime_data (nested in thisDataset), get every vict_descent value and store in a list
     let uniqueDescents = [...new Set(thisDataset.crime_data.map(item => item.vict_descent))];
+
+    // Return the same array of unique vict_descent values where only null is removed
     uniqueDescents = uniqueDescents.filter(item => item !== nullValue)
     
+    // Create an empty array; used to store the count for every unique vict_descent value
     let sliceData = []
 
+    // For every unique vict_descent value...
+    // Get the length (count) for that vict_descent value in the Dataset and store in the array
     uniqueDescents.forEach(Descent => {
-        let getCount = thisDataset.crime_data.filter(item => item.vict_descent === Descent).length;
+        const getCount = thisDataset.crime_data.filter(item => item.vict_descent === Descent).length;
         sliceData.push(getCount);
     });
 
 
     // Destroy canvas in the <div> container and reinitialise to create the new Chart
-    d3.select("#chartContainer1").html("");
-    d3.select("#chartContainer1").html("<canvas id='jsChart_Donut' width='100%' height='100%'></canvas>");
+    // Necessary in order to get the chart to utilise data from the new query run
+    d3.select("#chartContainer4").html("");
+    d3.select("#chartContainer4").html("<canvas id='jsChart_Donut' width='100%' height='100%'></canvas>");
 
-
+    // select the Canvas HTML element for the Chart
     const donutCanvas = document.getElementById("jsChart_Donut").getContext('2d');
 
-
+    // Initialise new Donut Chart where...
     const donutChart = new Chart(donutCanvas, {
         type: 'doughnut',
         data: {
-            labels: uniqueDescents,
+            labels: uniqueDescents,                                             // Labels = Unique Descents
             datasets: [{
-                data: sliceData}]
+                data: sliceData}]                                               // Dataset = Array of each Unique Descent Counts
         },
         options: {
             plugins: {
                 title: {
                     display: true,
-                    text: "Doughnut Chart - Distribution of Vitcim Descent",
+                    text: "Doughnut Chart - Distribution of Vitcim Descent"    // Title = Doughnut Chart - Distribution of Vitcim Descent
                 },
             }
         }
 
     });
-}
+};
 
 
-// Using the Chart JS library, this callback function initialises a Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
+// Using the Chart JS library, this callback function initialises the Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
 const init_StackedBarChart = (thisDataset) => {
     
+    // From the Queried JSON Dataset, store the selected options for crime categories and area name in their own arrays
     const uniqueCrimes = thisDataset.crime_categories;
     const uniqueAreas = thisDataset.area_names;
     
-    const barData = {
+    // Create a new object to store the labels and datasets (as empty array) for the Stacked Bar Chart
+    // Used for when creating the Chart
+    let barData = {
         labels: uniqueCrimes,
         datasets: []
     };
 
+    // For every Area Name from the array...
     uniqueAreas.forEach(Area => {
+        // Create a new object that represents a new column in the Stacked Bar Chart where...
         let columnData = {
-            label: Area,
-            data: [],
-            borderWidth: 2
+            label: Area,    // Column Label = Current Area Name
+            data: [],       // Dataset = count of Area Name per Crime Category in the JSON Dataset 
+            borderWidth: 2  // Column Width = 2
         };
 
+        // For every Crime Category from its respective array...
+        // Tally up the count (length) of the current Area Name against the current Crime Category
+        // Then, append the column object with the count
         uniqueCrimes.forEach(Crime => {
             let getCount = thisDataset.crime_data.filter(item => item.area_name === Area && item.crime_category === Crime).length;
             columnData.data.push(getCount);
         });
-    
+        
+        // Append the dataset key in the main bar chart object with the column object 
         barData.datasets.push(columnData);
 
     });
-    
-    //console.log(barData);
 
     // Destroy canvas in the <div> container and reinitialise to create the new Chart
+    // Necessary in order to get the chart to utilise data from the new query run
     d3.select("#chartContainer2").html("");
     d3.select("#chartContainer2").html("<canvas id='jsChart_StackedBar' width='100%' height='100%'></canvas>");
 
 
+    // select the Canvas HTML element for the Chart
     const barCanvas = document.getElementById("jsChart_StackedBar").getContext('2d');
 
+    // Create a new object containing option configurations for the Stacked Bar Chart where... 
     const chartOptions = {
         scales: {
             x: {
-                stacked: true,
+                stacked: true,                                                  // X axis = Stacked
                 ticks: {
                     font: {
-                        weight: 'bold'
+                        weight: 'bold'                                          // Font Style for X Ticks = Bold
                     }
                 }
             },
             y: {
-                stacked: true,
+                stacked: true,                                                  // Y axis = Stacked
                 ticks: {
                     font: {
-                        weight: 'bold'
+                        weight: 'bold'                                          // Font Style for Y Ticks = Bold
                     }
                 }
             }
         },
         plugins: {
             title: {
-                display: true,
-                text: "Stacked Bar Chart - No. Crime Incidents by Area",
-                fontSize: 48,
-                fontStyle: 'bold'
+                display: true,                                                  // Enable Title for the Stacked Bar Chart
+                text: "Stacked Bar Chart - No. Crime Incidents by Area",        // Title = Stacked Bar Chart - No. Crime Incidents by Area
+                fontSize: 48,                                                   // Title Font Size = 48
+                fontStyle: 'bold'                                               // Title Font Style = Bold
             }
         }
 
         
     };
 
+    // Initialise new Bar Chart where...
     const stackedBarChart = new Chart(barCanvas, {
         type: 'bar',
         data: {
-            labels: barData.labels,
-            datasets: barData.datasets
+            labels: barData.labels,             // X Labels = Crime Categories 
+            datasets: barData.datasets          // Dataset = nested column data objects (each representing the Area Name)
         },
-        options: chartOptions
+        options: chartOptions                   // Options = Chart Options object to enable Stacked mode and Title
 
     });
 
 };
 
-/*
-// Using the Chart JS library, this callback function initialises a Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
-const init_TimeSeries = (thisDataset) => {
 
-    const uniqueCrimes = thisDataset.crime_categories;
-    let crimeCounts = {};
+// Using the Chart JS library, this callback function initialises the Pie Chart (utilising the queried data ) within the carousel of the HTML webpage 
+const init_PieChart = (thisDataset) => {
+    // New constant with null; used as condition
+    const nullValue = null;
 
-    thisDataset.crime_data.forEach(item => {
-        const dateString = item.date_occ;
-        const dateActual = new Date(dateString);
-
-        // Format the date to a string to ensure consistent formatting
-        const dateFinal = dateActual.toISOString().split('T')[0];
+    // From the array of all vict_sex values from the dataset, return a new array containing only the unique vict_sex values
+        // '...' spread operator used to convert the following Set() object into a new array
+        // 'new Set()' is used to create a new Set instance to store only the unique values from the array of vict_sex values
+        // using map() on crime_data (nested in thisDataset), get every vict_sex value and store in a list    
+    let uniqueSexes = [...new Set(thisDataset.crime_data.map(item => item.vict_sex))];
+    uniqueSexes = uniqueSexes.filter(item => item !== nullValue)
     
-        
-        crimeCounts[dateFinal] = (crimeCounts[dateFinal] || 0) + 1;
+    // Create an empty array; used to store the count for every unique vict_sex value
+    let sliceData = []
+
+    // For every unique vict_sex value...
+    // Get the length (count) for that vict_sex value in the Dataset and store in the array    
+    uniqueSexes.forEach(Sex => {
+        const getCount = thisDataset.crime_data.filter(item => item.vict_sex === Sex).length;
+        sliceData.push(getCount);
     });
-    
-    const tsData = {
-        labels: Object.keys(crimeCounts).sort(), // Sort the dates for a chronological order
-        datasets: [
-            {
-                label: 'Number of Crimes',
-                data: Object.values(crimeCounts),
-                fill: false,
-            },
-        ],
-    };
+
 
     // Destroy canvas in the <div> container and reinitialise to create the new Chart
+    // Necessary in order to get the chart to utilise data from the new query run
     d3.select("#chartContainer3").html("");
-    d3.select("#chartContainer3").html("<canvas id='jsChart_TimeSeries' width='100%' height='100%'></canvas>");
+    d3.select("#chartContainer3").html("<canvas id='jsChart_Pie' width='100%' height='100%'></canvas>");
+
+    // select the Canvas HTML element for the Chart
+    const pieCanvas = document.getElementById("jsChart_Pie").getContext('2d');
+
+    // Initialise new Pie Chart where...
+    const pieChart = new Chart(pieCanvas, {
+        type: 'pie',
+        data: {
+            labels: uniqueSexes,                                    // Labels = Array of Unique Victim Sex Values
+            datasets: [{
+                data: sliceData}]                                   // Dataset = Array of each Unique Victim Sex Count
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Pie Chart - Distribution of Vitcim Sex" // Title = Pie Chart - Distribution of Vitcim Sex
+                },
+            }
+        }
+
+    });
+
+};
 
 
+// Using the Chart JS library, this callback function initialises the Time Series Chart (utilising the queried data ) within the carousel of the HTML webpage 
+const init_TimeSeries = (thisDataset) => {
+    // Create an array of Calendar Months
+    const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr','May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // From the Queried JSON Dataset, store the uniquely selected options for Years in a new Set() instance
+    // In the event only one year is selected e.g. 2020,2020
+    const uniqueYearsSet = new Set(thisDataset.years);
+
+    // Convert the Set() object into an array
+    const uniqueYearsArray = [...uniqueYearsSet];
+
+    // From the array of Years, get the min and max values
+    const minYear = Math.min(...uniqueYearsArray);
+    const maxYear = Math.max(...uniqueYearsArray);
+
+    // Return a new array containing all years e.g. 2020, 2021, 2022, 2023
+    // Length of array determined by difference between max and min plus 1 e.g. 2023 - 2020 + 1 = 4
+    // For every element in the array, return the addition of the min year + element index e.g. [2020 + 0, 2020 + 1, ... , 2020 + 3]
+    // '_' parameter not used but passed to run the function
+    const finalYears = Array.from({ length: maxYear - minYear + 1 }, (_, yearIndex) => minYear + yearIndex);
+
+
+    
+    // Return an array of dataset objects where each represents a year and an array of counts per calendar month against the year it belongs to.
+    // For every year in the array...
+    const tsData = finalYears.map(Year => {
+        // Return the JSON dataset with records for the current year
+        const currentYearData = thisDataset.crime_data.filter(item => new Date(item.date_occ).getFullYear() === Year);
+      
+        // Return a new array containing the count for each Calendar Month for the Current Year
+        // Length of array is 12 (Calendar Months)
+        // Current Month in iteration is determined by its index + 1
+        // From the already filtered JSON Dataset, return the length of the JSON Dataset filtered to the current Moth
+        const getMonthCounts = Array.from({ length: 12 }, (_, monthIndex) => {
+          const currentMonth = monthIndex + 1;
+          return currentYearData.filter(item => new Date(item.date_occ).getMonth() + 1 === currentMonth).length;
+        });
+        
+        // Finally, return an object containing the current Year and the array of month counts
+        return {
+          label: Year.toString(),
+          data: getMonthCounts,
+        };
+      });
+    
+    
+    // Destroy canvas in the <div> container and reinitialise to create the new Chart
+    d3.select("#chartContainer1").html("");
+    d3.select("#chartContainer1").html("<canvas id='jsChart_TimeSeries' width='100%' height='100%'></canvas>");
+
+
+    // select the Canvas HTML element for the Chart 
     const tsCanvas = document.getElementById("jsChart_TimeSeries").getContext('2d');
-
+    
+    // Create a new object containing option configurations for the Time Series Plot where... 
     const chartOptions = {
         scales: {
             x: {
-                type: 'time',
-                time: {
-                    unit: 'day'
-                },
+                type: 'category',                                       // X axis is of type 'category' NOT 'time' (monthLabels are not of date data type, but are sequenced in chronological order)
+                labels: monthLabels,                                    // Labels = array of months
                 ticks: {
                     font: {
-                        weight: 'bold'
+                        weight: 'bold'                                  // Font style for X-ticks = bold
                     }
-                }
+                }                
             },
             y: {
+                beginAtZero: true,                                      // Y axis range starts from 0
                 ticks: {
                     font: {
-                        weight: 'bold'
+                        weight: 'bold'                                  // Font style for Y-ticks = bold
                     }
                 }
             }
@@ -458,71 +589,30 @@ const init_TimeSeries = (thisDataset) => {
         plugins: {
             title: {
                 display: true,
-                text: "Time Series Chart - No. Crime Incidents",
-                fontSize: 48,
-                fontStyle: 'bold'
+                text: "Time Series Plot - No. Crime Incidents",         // Title = Time Series Plot - No. Crime Incidents
+                fontSize: 48,                                           // Title Font Size = 48
+                fontStyle: 'bold'                                       // Title Font Style = bold
             }
         }
-
+        
         
     };
 
     const tsChart = new Chart(tsCanvas, {
         type: 'line',
-        data: tsData,
-        options: chartOptions
-
-    });
-
-
-};
-*/
-
-// Using the Chart JS library, this callback function initialises a Stacked Bar Chart (utilising the queried data ) within the carousel of the HTML webpage 
-const init_PieChart = (thisDataset) => {
-
-    nullValue = null;
-
-    let uniqueSexes = [...new Set(thisDataset.crime_data.map(item => item.vict_sex))];
-    uniqueSexes = uniqueSexes.filter(item => item !== nullValue)
-    
-    let sliceData = []
-
-    uniqueSexes.forEach(Sex => {
-        let getCount = thisDataset.crime_data.filter(item => item.vict_sex === Sex).length;
-        sliceData.push(getCount);
-    });
-
-
-    // Destroy canvas in the <div> container and reinitialise to create the new Chart
-    d3.select("#chartContainer3").html("");
-    d3.select("#chartContainer3").html("<canvas id='jsChart_Pie' width='100%' height='100%'></canvas>");
-
-
-    const pieCanvas = document.getElementById("jsChart_Pie").getContext('2d');
-
-
-    const pieChart = new Chart(pieCanvas, {
-        type: 'pie',
         data: {
-            labels: uniqueSexes,
-            datasets: [{
-                data: sliceData}]
+            labels: monthLabels,        // X Axis Labels = Calendar Months
+            datasets: tsData            // Datasets = Array of 'Year With Counts per Calendar Month' Objects 
         },
-        options: {
-            plugins: {
-                title: {
-                    display: true,
-                    text: "Pie Chart - Distribution of Vitcim Sex",
-                },
-            }
-        }
+        options: chartOptions           // Options = Chart Options object to enable Title and configure axis presentation
 
     });
+    
 
 };
 
 
+// Callback function to built the interactive Dropdown Menus (called only during StartUp) 
 const build_Dropdowns = (dropdownAreas, dropdownCrimes, arrayAreas, arrayCrimes) => {
     // For every crimeCat element in the array of crimeCats...
     // Append the list of options in the dropdown menu with the current crimeCat element where...
@@ -548,7 +638,7 @@ const build_Dropdowns = (dropdownAreas, dropdownCrimes, arrayAreas, arrayCrimes)
             nSelectedText  : "Area(s)",
             allSelectedText: "All areas",
             numberDisplayed: 0.5 // Set to 0.5 instead to 0 to avoid disabling summary text
-        }).multiselect('select', [arrayAreas[0], arrayAreas[1]]);
+        }).multiselect('select', [arrayAreas[0], arrayAreas[1]]); // By default, select the first two Area Name options upon generation (during Startup)
 
         $('#selCrime').multiselect({
             enableResetButton: true,
@@ -556,11 +646,12 @@ const build_Dropdowns = (dropdownAreas, dropdownCrimes, arrayAreas, arrayCrimes)
             nSelectedText  : "Crime(s)",
             allSelectedText: "All crimes",
             numberDisplayed: 0.5 
-        }).multiselect('select', [arrayCrimes[0], arrayCrimes[1]]);
+        }).multiselect('select', [arrayCrimes[0], arrayCrimes[1]]);  // By default, select the first two Crime Category options upon generation (during Startup)
     });
 };
 
 
+// Callback function to built the double-handle Slider (called only during StartUp) 
 const build_Slider = (arrayYears) => {
     // Creating year slider
     var year_slider = new rSlider({
@@ -570,7 +661,7 @@ const build_Slider = (arrayYears) => {
         tooltip: false,
         scale: true,
         labels: true,
-        set: [arrayYears[0], arrayYears[1]],
+        set: [arrayYears[0], arrayYears[1]],   // By default, select the first two Years upon generation (during Startup)
         width: '300%'
     });
 };

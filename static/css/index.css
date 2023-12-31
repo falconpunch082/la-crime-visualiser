@@ -137,10 +137,19 @@ html {
   justify-content: center;
 }
 .home-button {
-  width: 70%;
+  width: 90%;
   height: 60%;
   align-items: center;
-  justify-content: center
+  justify-content: center;
+  font-weight: bold;
+  opacity: 1;
+  transition: 0.3s;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+.home-button:hover {
+  opacity: 0.6
 }
 .home-container12 {
   width: 100%;
