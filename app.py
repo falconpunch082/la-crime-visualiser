@@ -13,6 +13,8 @@ from urllib.parse import unquote # Reference: https://docs.python.org/3/library/
 # Reference: https://stackoverflow.com/questions/26980713/solve-cross-origin-resource-sharing-with-flask
 from flask_cors import CORS
 import os
+import re  # Add this import for regular expressions
+
 
 #################################################
 # SQLAlchemy Database Setup
@@ -136,6 +138,11 @@ def filter_options():
 @app.route("/api/v1.0/<years_str>/<area_names_str>/<crime_categories_str>")
 def filtered_data(years_str, area_names_str, crime_categories_str):
     
+    # Use a regular expression to check if years_str matches the expected pattern
+    if not re.match(r'^\d{4},\d{4}$', years_str):
+        # Return a 400 Bad Request response with the error message
+        return jsonify({"error": "Bad Request: Years parameter expected to contain two years separated with a comma (e.g., 2020,2022)"}), 400
+
     years_list = [int(year) for year in years_str.split(',')]
     areas_list = area_names_str.split(',')
     crimes_list = crime_categories_str.split(',')
