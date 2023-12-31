@@ -27,6 +27,8 @@ This repository contains all code made by Group 5 that is necessary to run the f
 
 - Nicholas Dale (falconpunch082): Frontend (responsive HTML + CSS), and implementation of input solutions.
 
+- Wassim Deen (wdeen): Integration of visualisation website with online API and final touches to visualisation website.
+
 ---
 
 **Technologies used**
