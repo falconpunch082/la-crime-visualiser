@@ -26,26 +26,38 @@
 ## Contributions
   * **Nicholas Dale (falconpunch082)**
     - [Frontend] Full web development of Analytics Dashboard (HTML / CSS)
+
     - Implementation of input solutions (Bootstrap.js / D3.js).
+
     - [Data Visualisation #1] Leaflet Map (Leaflet.js)
 
    * **Talieh Sheikholeslami (Talieh-Sh)**
     - [Python Flask / SQLAlchemy] Development of Flask API to stream data from PostgreSQL Database for initialisation of JavaScript data visualisations.
+
     - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' Cloud
+
     - For more information: https://render.com/
 
    * **Michael Zabala (michaelz-id)**
     - [Python API Calling] Extraction of raw dataset
+
     - [Python Pandas] Data cleaning + manipulation + export to CSV
+
     - [PostgreSQL] Database schema design + setup
     
    * **Wassim Deen (wdeen)**
     - [Backend] Full integration of Analytical Dashboard webpage with Python Flask API (local / online)
+
     - [Frontend] Final polishing to Analytics Dashboard webpage (HTML / CSS)
+
     - [Miscellaneous] Additional support with PostgreSQL / Python Flask development 
+
     - [Data Visualisation #2] Time Series Plot (Chart.js / D3.js)
+
     - [Data Visualisation #3] Stacked Bar Chart (Chart.js / D3.js)
+
     - [Data Visualisation #4] Doughnut Chart (Chart.js / D3.js)
+
     - [Data Visualisation #5] Pie Chart (Chart.js / D3.js)
 
 
