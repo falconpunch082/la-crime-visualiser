@@ -32,7 +32,7 @@
    * **Talieh Sheikholeslami (Talieh-Sh)**
     - [Python Flask / SQLAlchemy] Development of Flask API to stream data from PostgreSQL Database for initialisation of JavaScript data visualisations.
     - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' Cloud 
-      - For more information: https://render.com/
+    - For more information: https://render.com/
 
    * **Michael Zabala (michaelz-id)**
     - [Python API Calling] Extraction of raw dataset
