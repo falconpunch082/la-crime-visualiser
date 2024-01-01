@@ -79,7 +79,10 @@
 
 **Launch**
 
-There is no need for installation to view this project. The visualisation is hosted on a GitHub Pages website that is linked in this repository. As for the API, the link is provided within the visualisation website during startup.
+There is no need for installation to view this project. Everything is hosted online thanks to Render.
+The link to the interactive dashboard is available on the repo's description. Otherwise, you can click this link [here](https://la-crime-project.onrender.com/frontend) to access it.
+To access the API that contains our modified database, please click the link [here](https://la-crime-project.onrender.com/). Alternatively, the link to the API is provided during the visualisation's startup.
+This repo also contains the necessary files to run the visualisation and database locally. Installation is necessary to host the visualisation through localhost.
 
 ---
 
