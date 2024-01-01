@@ -2,10 +2,21 @@
 # **Los Angeles: Crime Data Analytics Dashboard**
 
 <p align="center">
-<img src="./Images/Dashboard_Demo.gif" width="100%">
+<img src="./Images/Project_Title.png" width="100%">
 </p>
 
-## Project Contributors
+# Table of Contents
+1. [Project Members](#project-members)
+2. [Project Overview](#project-overview)
+3. [Analytics Dashboard (Preview)](#analytics-dashboard-preview)
+4. [Contributions](#contributions)
+5. [Final Repository Structure](#final-repository-structure)
+6. [Crime Dataset Overview](#crime-dataset-overview)
+7. [Target Audience](#target-audience)
+8. [Interactive Visualisations](#interactive-visualisations)
+
+
+## Project Members
   * **Nicholas Dale**
     - [Github] https://github.com/falconpunch082
  * **Talieh Sheikholeslami**
@@ -17,11 +28,41 @@
   
 
 ## Project Overview
-- To extract data provided by [LAPD API](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8/about_data) and modifying it to best suit the project's purposes.
+For this project, we utilised the [City of Los Angeles' Crime Dataset](https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8/about_data) to develop an interactive analytics dashboard for general users to accessibly discover patterns and trends of criminal acts taking place within the city.
 
-- To host modified data online as a Flask API that takes data from a database hosted on the Internet.
+The publicly available dataset is an official source supplied by the Los Angeles Police Department and is routinely updated. It contains over 850,000 records worth of reported crime incidents in the City of Los Angeles ranging from 2020 and onward.
 
-- To create an interactive dashboard displaying data from the API, complete with a map displaying where crimes occur, summary statistics displayed on graphs and a filter where enduser can select crimes based on crime type, area and year range.
+The following visualisations were developed for the dashboard and references the Crime Dataset:
+1. **Interactive Map (Heatmap & Markers)** - Geographically marking locations of crime incidents that have occurred in Los Angeles
+2. **Time Series Plot** - No. Crime Incidents by Calendar Year(s)
+3. **Stacked Bar Chart** - No. Crime Incidents by Area & Crime Category
+4. **Pie Chart** - Distribution of Victim Sex
+5. **Doughnut Chart** - Distribution of Ethnic Descent
+
+The following interactive filters were developed for the dashboard:
+1. **Dropdown Menu #1** - List of Areas within Los Angeles
+2. **Dropdown Menu #2** - List of Crime Categories Occurred within Los Angeles
+3. **Double-Handle Slider** - Calendar Years
+
+This project primarily utilised the following technologies to develop the overall dashboard:
+1. **HTML + CSS (with assistance from [teleport.io](https://teleporthq.io/))** - Frontend Web Development of Interactive Dashboard
+2. **[bootstrap.js](https://getbootstrap.com/) / [bootstrap-multiselect.js](https://github.com/davidstutz/bootstrap-multiselect)** - 
+3. **Leaflet.js** - Interactive Map Visualisation
+4. **Chart.js** - Remaining Interactive Visualisations (Time Series Plot / Stacked Bar Chart / Pie Chart / Doughnut Chart)
+5. **PostgreSQL** - Database to House the Los Angeles Crime Dataset
+6. **Pandas** - Data Cleaning & Aggregation
+7. **SQLAlchemy** - Connect & Interact with the PostgreSQL Database via Python
+8. **Python Flask** - Custom Web Application & API Routes suitable to the project
+9. **[Render](https://render.com/)** - API App Hosting via Cloud
+10. **[neon.tech](https://neon.tech/)** - SQL Database Hosting via Cloud
+
+
+## Analytics Dashboard (Preview)
+
+<p align="center">
+<img src="./Images/Dashboard_Demo.gif" width="100%">
+</p>
+
 
 ## Contributions
   * **Nicholas Dale (falconpunch082)**
@@ -50,26 +91,63 @@
      - [Data Visualisation #5] Pie Chart (Chart.js / D3.js)
 
 
+## Final Repository Structure
+```
+├── README.md
+├── .gitignore
+├── app_render.py
+├── 'templates' Folder
+├── 'static' Folder
+├── 'CrimeSQL' Folder
+├── 'Images' Folder
+├── 'Slide Deck' Folder
+└── '_localhost' Folder
+    ├── index.html
+    ├── app_local.py
+    ├── 'templates' Folder
+    └── 'static' Folder
+```
 
----
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Crime Dataset Overview
 
-**Technologies used**
 
-- Python (SQL database generation and Flask).
+## Target Audience
 
-- PostgresSQL + [neon.tech](https://neon.tech/).
 
-- [Render](https://render.com/) for API hosting.
+## Interactive Visualisations
 
-- HTML + CSS (with assistance from [teleport.io](https://teleporthq.io/)).
+### **#1 - Leaflet Map (Markers & Heatmap)**
 
-- Javascript libraries like Leaflet, [charts.js](https://www.chartjs.org/), [rSlider](https://github.com/slawomir-zaziablo/range-slider/tree/master) and [heatmap.js](https://www.patrick-wied.at/static/heatmapjs/plugin-leaflet-layer.html).
+<p align="center">
+  <img src="./Images/Leaflet_Map.png" width="70%">
+</p>
 
-- [Bootstrap](https://getbootstrap.com/) and the [bootstrap-multiselect](https://github.com/davidstutz/bootstrap-multiselect) library.
+### **#2 - Time Series Plot**
 
-- Leaflet libaries like [markercluster](https://github.com/Leaflet/Leaflet.markercluster), [FeatureGroup.SubGroup](https://github.com/ghybs/Leaflet.FeatureGroup.SubGroup?tab=readme-ov-file), and [leaflet-heatmap](https://www.patrick-wied.at/static/heatmapjs/example-heatmap-leaflet.html).
+<p align="center">
+  <img src="./Images/TimeSeries_Plot.png" width="70%">
+</p>
 
----
+### **#3 - Stacked Bar Chart**
+
+<p align="center">
+  <img src="./Images/StackedBar_Chart.png" width="70%">
+</p>
+
+### **#4 - Pie Chart**
+
+<p align="center">
+  <img src="./Images/Pie_Chart.png" width="70%">
+</p>
+
+### **#5 - Doughnut Chart**
+
+<p align="center">
+  <img src="./Images/Doughnut_Chart.png" width="70%">
+</p>
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 **Flow chart for data visualisation process**
 
