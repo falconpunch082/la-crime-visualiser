@@ -85,6 +85,8 @@ The link to the interactive dashboard is available on the repo's description. Ot
 
 To access the API that contains our modified database, please click the link [here](https://la-crime-project.onrender.com/). Alternatively, the link to the API is provided during the visualisation's startup.
 
+This repo also contains the necessary files to run the visualisation and database locally. Installation is necessary to host the visualisation through localhost. 
+
 ---
 
 **App Server Setup (Local/Cloud)**  
