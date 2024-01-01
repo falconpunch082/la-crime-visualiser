@@ -111,9 +111,54 @@ This project primarily utilised the following technologies to develop the overal
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Crime Dataset Overview
 
+Upon interacting with the Render API's dynamic query, a JSON file will be generated. The following is a breakdown of what is provided.
+
+```
+{
+  "years": [...], // Queried year range
+  "area_names": [...], // Queried selection of areas
+  "crime_categories": [...], //Queried selection of crimes
+  "crime_data": [ // All crime datasets that fit the criteria are listed below
+    {
+      "id": ..., // Index number of dataset
+      "dr_no": ..., // Division number
+      "date_rptd": ..., // Date when crime was reported (ignore timestamp)
+      "date_occ": ..., // Date when crime occured (ignore timestamp)
+      "time_occ": ..., // Time when crime occured
+      "area_name": ..., // Area where crime occured*
+      "crime_category": ..., // Category of crime according to specific crime*
+      "crm_cd": ..., // Crime code according to LAPD policy*
+      "crm_cd_desc": ..., // Specific crime done, named according to LAPD policy*
+      "vict_age": ..., // Age of victim
+      "vict_sex": ..., // Biological sex of victim*
+      "vict_descent": ..., // Ethnicity of victim*
+      "premis_desc": ..., // Description of place where crime occured
+      "location": ..., // Address of where crime occured
+      "cross_street": ..., // If the crime occured near an intersection, this will be filled to indicate other street's name. Otherwise null.
+      "lat": ..., // Latitude of location where crime happened
+      "lon": ..., // Longitde of location where crime happened
+    },
+    {
+      ...
+    }
+  ]
+}
+
+// * -> refer to data_cleanup.ipynb for clarification
+```
 
 ## Target Audience
 
+This interactive dashboard is designed to cater to 3 main target audiences.
+
+1. The Los Angeles Police Department - Given that we have utilised their raw dataset and not only modified it, but also provided data visualisations, it is hoped that
+this interactive dashboard can benefit the police department in multitudes of ways. For example, upon identifying crime hotspots using the map, more patrol routes can
+be made to cover those hotspots to reduce crime in the area. Another example would be identifying months where frequency of crime increases and therefore putting more
+resources into patrolling during those months.
+
+2. Los Angeles policymakers - While the police department can use the dashboard to intervene crime, policymakers of the city can use the visusalisations to create policies that aim to reduce the likelihood of crime occuring, whether it be by implementing environmental controls (e.g., requesting more surveilance in certain areas), or by creating programs that aim to protect vulnerable people from falling victim to crime. Moreover, policymakers can go through years and cross-reference them to policies made over the years to determine whether a policy was effective in reducing crime rate.
+
+3. Citizens of Los Angeles - The raw dataset is publically available for use, and so it made sense that a tool be made for the citizens of Los Angeles to understand the data without technical expertise. From this visualisation, citizens can be more informed of their surroundings, and therefore take steps to ensure their safety.
 
 ## Interactive Visualisations
 
@@ -123,11 +168,15 @@ This project primarily utilised the following technologies to develop the overal
   <img src="./Images/Leaflet_Map.PNG" width="70%">
 </p>
 
+> This Leaflet map allows the user to visualise the location of crimes in a geological sense. In addition to providing where a crime occurred on the map, clicking the marker provides details on the crime. Crimes that occur close to each other are automatically clustered. In addition, the user can choose to enable a heatmap, which allows them to immediately identify crime hotspots. Moreover, users can switch between street view and satelite view to provide more context.
+
 ### **#2 - Time Series Plot**
 
 <p align="center">
   <img src="./Images/TimeSeries_Plot.PNG" width="70%">
 </p>
+
+> This time series plots updates upon user query, and displays the frequency of crime over months of a year within a year range. Each year is represented as a line chart which shows how many crimes happened within a month of the year. These lines can be disabled and re-enabled by clicking on the coloured boxes.
 
 ### **#3 - Stacked Bar Chart**
 
@@ -135,11 +184,15 @@ This project primarily utilised the following technologies to develop the overal
   <img src="./Images/StackedBar_Chart.PNG" width="70%">
 </p>
 
+> This stacked bar chart aims to provide not only a comparison of the frequency of a specific crime based on the queried data, but also a comparison of the frequency of crime within a specific area. In this example, the user can understand that given a query, aggravated assault is more prevalent than burglary. The user can also see the distribution of aggravated assault between the areas of 77th Street and Central (77th Street has more assault crimes reported than Central).
+
 ### **#4 - Pie Chart**
 
 <p align="center">
   <img src="./Images/Pie_Chart.PNG" width="70%">
 </p>
+
+> This pie chart displays the distribution of the biological sex of the victims affected in the crimes queried. It is divided into three categories: male, female and unknown. Each biological sex can be removed by clicking on the coloured boxes; removing them will update the pie chart to represent the selected sexes.
 
 ### **#5 - Doughnut Chart**
 
@@ -147,11 +200,7 @@ This project primarily utilised the following technologies to develop the overal
   <img src="./Images/Doughnut_Chart.PNG" width="70%">
 </p>
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-**Flow chart for data visualisation process**
-
-![Flow chart for data visualisation process](https://github.com/falconpunch082/la-crime-visualiser/assets/26648391/a7b5e73f-9049-46b2-aa30-8eb205913943)
+> This doughnut chart displays the distribution of the ethnicity of the victim. Each unique ethnicity is automatically determined according to the query provided. Like the pie chart, each ethnicity can be removed by clicking on the coloured boxes; removing them will update the pie chart to represent the selected ethnicities.
 
 ---
 
