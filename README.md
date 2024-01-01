@@ -15,7 +15,7 @@
 7. [Target Audience](#target-audience)
 8. [Interactive Visualisations](#interactive-visualisations)
 9. [Launch](#launch)
-10. [App Server Setup (Local/Cloud)](#app-server-setup-(local/cloud))
+10. [App Server Setup](#app-server-setup)
 
 
 ## Project Members
@@ -217,7 +217,7 @@ This repo also contains the necessary files to run the visualisation and databas
 
 ---
 
-## App Server Setup (Local/Cloud)  
+## App Server Setup 
 
 + Add DB Password  
     You need to create dbpassword.txt in the project working directory and paste your database password there.  
