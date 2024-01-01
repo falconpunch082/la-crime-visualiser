@@ -14,6 +14,8 @@
 6. [Crime Dataset Overview](#crime-dataset-overview)
 7. [Target Audience](#target-audience)
 8. [Interactive Visualisations](#interactive-visualisations)
+9. [Launch](#launch)
+10. [App Server Setup (Local/Cloud)](#app-server-setup-(local/cloud))
 
 
 ## Project Members
@@ -204,7 +206,7 @@ resources into patrolling during those months.
 
 ---
 
-**Launch**
+## Launch
 
 There is no need for installation to view this project. Everything is hosted online thanks to Render.
 
@@ -215,7 +217,8 @@ This repo also contains the necessary files to run the visualisation and databas
 
 ---
 
-**App Server Setup (Local/Cloud)**  
+## App Server Setup (Local/Cloud)  
+
 + Add DB Password  
     You need to create dbpassword.txt in the project working directory and paste your database password there.  
     Note: make sure to NOT commit this file to Git.
@@ -238,11 +241,3 @@ This repo also contains the necessary files to run the visualisation and databas
 + Install Required Python Packages 
     * Run below command in your project working directory  
     ``` pip install -r requirements.txt```
-
-
- 
-
-
-
- 
-
