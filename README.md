@@ -49,12 +49,13 @@ This project primarily utilised the following technologies to develop the overal
 2. **[bootstrap.js](https://getbootstrap.com/) / [bootstrap-multiselect.js](https://github.com/davidstutz/bootstrap-multiselect)** - Interactive Filters (Dropdown Menus / Slider)
 3. **Leaflet.js** - Interactive Map Visualisation
 4. **Chart.js** - Remaining Interactive Visualisations (Time Series Plot / Stacked Bar Chart / Pie Chart / Doughnut Chart)
-5. **PostgreSQL** - Database to House the Los Angeles Crime Dataset
-6. **Pandas** - Data Cleaning & Aggregation
-7. **SQLAlchemy** - Connect & Interact with the PostgreSQL Database via Python
-8. **Python Flask** - Custom Web Application & API Routes suitable to the project
-9. **[Render](https://render.com/)** - API App Hosting via Cloud
-10. **[neon.tech](https://neon.tech/)** - SQL Database Hosting via Cloud
+5. **D3.js** - Connect with Interactive Elements on Dashboard Webpage
+6. **PostgreSQL** - Database to House the Los Angeles Crime Dataset
+7. **Pandas** - Data Cleaning & Aggregation
+8. **SQLAlchemy** - Connect & Interact with the PostgreSQL Database via Python
+9. **Python Flask** - Custom Web Application & API Routes suitable to the project
+10. **[Render](https://render.com/)** - API App Hosting via Cloud
+11. **[neon.tech](https://neon.tech/)** - SQL Database Hosting via Cloud
 
 
 ## Analytics Dashboard (Preview)
