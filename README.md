@@ -74,8 +74,7 @@ This project primarily utilised the following technologies to develop the overal
 
    * **Talieh Sheikholeslami (Talieh-Sh)**
      - [Python Flask / SQLAlchemy] Development of Flask API to stream data from PostgreSQL Database for initialisation of JavaScript data visualisations.
-     - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' Cloud
-     - For more information: https://render.com/
+     - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' & 'neon.tech' Cloud
 
    * **Michael Zabala (michaelz-id)**
      - [Python API Calling] Extraction of raw dataset
