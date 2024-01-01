@@ -46,7 +46,7 @@ The following interactive filters were developed for the dashboard:
 
 This project primarily utilised the following technologies to develop the overall dashboard:
 1. **HTML + CSS (with assistance from [teleport.io](https://teleporthq.io/))** - Frontend Web Development of Interactive Dashboard
-2. **[bootstrap.js](https://getbootstrap.com/) / [bootstrap-multiselect.js](https://github.com/davidstutz/bootstrap-multiselect)** - 
+2. **[bootstrap.js](https://getbootstrap.com/) / [bootstrap-multiselect.js](https://github.com/davidstutz/bootstrap-multiselect)** - Interactive Filters (Dropdown Menus / Slider)
 3. **Leaflet.js** - Interactive Map Visualisation
 4. **Chart.js** - Remaining Interactive Visualisations (Time Series Plot / Stacked Bar Chart / Pie Chart / Doughnut Chart)
 5. **PostgreSQL** - Database to House the Los Angeles Crime Dataset
