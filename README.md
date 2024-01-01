@@ -2,7 +2,7 @@
 # **Los Angeles: Crime Data Analytics Dashboard**
 
 <p align="center">
-<img src="./Images/Project_Title.png" width="100%">
+<img src="./Images/Project_Title.PNG" width="100%">
 </p>
 
 # Table of Contents
@@ -120,31 +120,31 @@ This project primarily utilised the following technologies to develop the overal
 ### **#1 - Leaflet Map (Markers & Heatmap)**
 
 <p align="center">
-  <img src="./Images/Leaflet_Map.png" width="70%">
+  <img src="./Images/Leaflet_Map.PNG" width="70%">
 </p>
 
 ### **#2 - Time Series Plot**
 
 <p align="center">
-  <img src="./Images/TimeSeries_Plot.png" width="70%">
+  <img src="./Images/TimeSeries_Plot.PNG" width="70%">
 </p>
 
 ### **#3 - Stacked Bar Chart**
 
 <p align="center">
-  <img src="./Images/StackedBar_Chart.png" width="70%">
+  <img src="./Images/StackedBar_Chart.PNG" width="70%">
 </p>
 
 ### **#4 - Pie Chart**
 
 <p align="center">
-  <img src="./Images/Pie_Chart.png" width="70%">
+  <img src="./Images/Pie_Chart.PNG" width="70%">
 </p>
 
 ### **#5 - Doughnut Chart**
 
 <p align="center">
-  <img src="./Images/Doughnut_Chart.png" width="70%">
+  <img src="./Images/Doughnut_Chart.PNG" width="70%">
 </p>
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
