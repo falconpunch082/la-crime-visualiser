@@ -75,11 +75,11 @@ This project primarily utilised the following technologies to develop the overal
    * **Talieh Sheikholeslami (Talieh-Sh)**
      - [Python Flask / SQLAlchemy] Development of Flask API to stream data from PostgreSQL Database for initialisation of JavaScript data visualisations.
      - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' & 'neon.tech' Cloud
+     - [PostgreSQL] Database schema design + setup
 
    * **Michael Zabala (michaelz-id)**
      - [Python API Calling] Extraction of raw dataset
      - [Python Pandas] Data cleaning + manipulation + export to CSV
-     - [PostgreSQL] Database schema design + setup
     
    * **Wassim Deen (wdeen)**
      - [Backend] Full integration of Analytical Dashboard webpage with Python Flask API (local / online)
@@ -207,8 +207,10 @@ resources into patrolling during those months.
 **Launch**
 
 There is no need for installation to view this project. Everything is hosted online thanks to Render.
+
 The link to the interactive dashboard is available on the repo's description. Otherwise, you can click this link [here](https://la-crime-project.onrender.com/frontend) to access it.
 To access the API that contains our modified database, please click the link [here](https://la-crime-project.onrender.com/). Alternatively, the link to the API is provided during the visualisation's startup.
+
 This repo also contains the necessary files to run the visualisation and database locally. Installation is necessary to host the visualisation through localhost.
 
 ---
