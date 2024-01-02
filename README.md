@@ -78,6 +78,7 @@ This project primarily utilised the following technologies to develop the overal
      - [Python Flask / SQLAlchemy] Development of Flask API to stream data from PostgreSQL Database for initialisation of JavaScript data visualisations.
      - [Cloud-Based App Hosting] Migration of entire project solution to 'Render' & 'neon.tech' Cloud
      - [PostgreSQL] Database schema design + setup
+     - [Frontend] Full Web development of Flask Application Landing Page (HTML)
 
    * **Michael Zabala (michaelz-id)**
      - [Python API Calling] Extraction of raw dataset

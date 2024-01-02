@@ -356,7 +356,7 @@ const init_DonutChart = (thisDataset) => {
             plugins: {
                 title: {
                     display: true,
-                    text: "Doughnut Chart - Distribution of Vitcim Descent"    // Title = Doughnut Chart - Distribution of Vitcim Descent
+                    text: "Doughnut Chart - Distribution of Victim Descent"    // Title = Doughnut Chart - Distribution of Vitcim Descent
                 },
             }
         }
@@ -499,7 +499,7 @@ const init_PieChart = (thisDataset) => {
             plugins: {
                 title: {
                     display: true,
-                    text: "Pie Chart - Distribution of Vitcim Sex" // Title = Pie Chart - Distribution of Vitcim Sex
+                    text: "Pie Chart - Distribution of Victim Sex" // Title = Pie Chart - Distribution of Vitcim Sex
                 },
             }
         }
