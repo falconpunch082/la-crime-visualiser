@@ -42,8 +42,8 @@ The following visualisations were developed for the dashboard and references the
 5. **Doughnut Chart** - Distribution of Ethnic Descent
 
 The following interactive filters were developed for the dashboard:
-1. **Dropdown Menu #1** - List of Areas within Los Angeles
-2. **Dropdown Menu #2** - List of Crime Categories Occurred within Los Angeles
+1. **Multiselect Dropdown Menu #1** - List of Areas within Los Angeles
+2. **Multiselect Dropdown Menu #2** - List of Crime Categories Occurred within Los Angeles
 3. **Double-Handle Slider** - Calendar Years
 
 This project primarily utilised the following technologies to develop the overall dashboard:
